@@ -75,10 +75,6 @@ def StairMoving():
         stair_list.pop(0)
         stair_list.append(Stair())
 
-
-
-
-
 #
 crashed = False 
 pause = False
@@ -86,7 +82,6 @@ pause = False
 def GameStart():
     pass
 
-"""
 
 #LOOP(Logic of the game)
 def GameLoop():
@@ -118,8 +113,8 @@ def GameLoop():
         pygame.display.update()
         clock.tick(60)
 
-
 """
+
 
 def GameEnd():
     pass
