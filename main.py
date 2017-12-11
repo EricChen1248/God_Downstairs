@@ -31,7 +31,7 @@ def Button(msg,x,y,w,h,ic,ac,action = None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     
-    #change color
+    # change color
     if x+w > mouse[0] > x and y+h > mouse[1] > y:
         pygame.draw.rect(game_display, ac,(x,y,w,h))
         
@@ -97,6 +97,11 @@ Button Motion
 """ 
 def Paused():
     global pause   
+    
+    # remove orignal button
+    pygame.draw.rect(game_display, white,(display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1))
+    pygame.draw.rect(game_display, white,(display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1))
+
     pause = True
     large_text = pygame.font.Font("freesansbold.ttf",115)
     text_surf, text_rect = TextObjects("Paused", large_text)
