@@ -49,8 +49,8 @@ def BackgroundDisplay():
     """Not-moving objects display"""
     #background
     game_display.fill(white)
-    background_image = pygame.image.load('background_test.png')
-    background_image_size = pygame.transform.scale(background_image, (int(display_width * 0.6), display_height))
+    life_photo = pygame.image.load('background_test.png')
+    background_image_size = pygame.transform.scale(life_photo, (int(display_width * 0.6), display_height))
     game_display.blit(background_image_size, [0, 0])
 
     #title
@@ -94,26 +94,35 @@ def BackgroundDisplay():
 
 """
 Button Motion
-"""
-
+""" 
 def Paused():
-    #largeText = pygame.font.SysFont("freesansbold",115)
-    TextSurf, TextRect = TextObjects("Paused", largeText)
-    TextRect.center = ((display_width/2),(display_height/2))
-    gameDisplay.blit(TextSurf, TextRect)
-
+    global pause   
+    pause = True
+    large_text = pygame.font.Font("freesansbold.ttf",115)
+    text_surf, text_rect = TextObjects("Paused", large_text)
+    text_rect.center = ((display_width * 0.6 /2),(display_height * 0.4))
+    
     while pause:
+        game_display.blit(text_surf, text_rect)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
                 
-        button("Continue",150,450,100,50,green,bright_green,unpause)
-        button("Quit",550,450,100,50,red,bright_red,quitgame)
+        Button("Continue",display_width * 0.1,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2,green,bright_green,Unpause)
+        Button("Quit",display_width * 0.4,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2,red,bright_red,QuitGame)
 
         pygame.display.update()
         clock.tick(15)
 
+def Unpause():
+    global pause
+    pause = False
+
+def QuitGame():
+    pygame.quit()
+    quit()
 
 
 '''
@@ -121,15 +130,22 @@ def Paused():
 #initial stair list
 stair_list = []
 stair_number = 8 #how many stairs
+stair_photo = pygame.image.load('.png')
 for i in range(stair_number):
-    stair_list.append(Stair())
+    new_stair = Stair()
+    stair_list.append(new_stair)
 '''
 
 def GraphicDisplay():
     """Moving objects display"""
 
     #person
-    person = Person()
+    person_photo = pygame.image.load('.png')
+    life_photo = pygame.image.load('.png')
+    person = Person(width, height, x, y, person_photo, 12, life_photo)
+    person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
+    person.life_photo = pygame.transform.scale(life_photo, (int(display_width * 0.6), display_height))
+  
     game_display.blit(person.photo, [person.x, person.y])
 
     #stairs
@@ -145,14 +161,13 @@ def GraphicDisplay():
     #points
 
 
-
-
 def StairMoving():
     """Complicated moving about stairs"""
     #Just checking the first one
     if stair_list[0].y < 0:
         stair_list.pop(0)
-        stair_list.append(Stair())
+        next_stair = Stair()
+        stair_list.append(next_stair)
 
 #
 crashed = False 
@@ -164,9 +179,6 @@ def GameStart():
 
 #LOOP(Logic of the game)
 def GameLoop():
-
-
-
     global pause
 
     gameExit = False
@@ -182,12 +194,17 @@ def GameLoop():
 
 
         for event in pygame.event.get():
+            #Quit
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            #if event
-               # pause = True
-               # paused()
+
+            #Press Space to Pause
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    pause = True
+                    Paused()
+
 
         pygame.display.update()
         clock.tick(60)
