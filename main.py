@@ -89,10 +89,6 @@ def BackgroundDisplay():
 
     for i in range(12):
         pygame.draw.rect(game_display, black,[display_width*(0.7+0.0195*i), display_height*0.42, display_width*0.02, display_height*0.06],1) 
-     
-    #Pause and Restart(Button)
-    Button("Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, green, bright_green,action = Paused)
-    Button("Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, red, bright_red,action = GameStart)
 
 
 """ Button Motion """ 
@@ -117,8 +113,8 @@ def Paused():
                 pygame.quit()
                 quit()
                 
-        Button("Continue",display_width * 0.1,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2,green,bright_green,Unpause)
-        Button("Quit",display_width * 0.4,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2,red,bright_red,QuitGame)
+        Button("Continue",display_width * 0.05,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2,green,bright_green,Unpause)
+        Button("Quit",display_width * 0.38,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2,red,bright_red,QuitGame)
 
         pygame.display.update()
         clock.tick(15)
@@ -167,6 +163,10 @@ def GraphicDisplay():
         pygame.draw.rect(game_display, red,[display_width*(0.7+0.0195*i), display_height*0.42, display_width*0.019, display_height*0.059]) 
      
     #points
+
+    #Pause and Restart(Button)
+    Button("Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, green, bright_green,action = Paused)
+    Button("Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, red, bright_red,action = GameStart)
 
 def StairMoving():
     """Complicated moving about stairs"""
