@@ -1,10 +1,10 @@
 import pygame
 import time
 import random
-#import Person
-#import Stair
+# import Person
+# import Stair
 
-#initiation and display
+# initiation and display
 pygame.init() 
 
 display_width = 1200
@@ -13,7 +13,7 @@ game_display = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('小傑下樓梯')
 clock = pygame.time.Clock() 
 
-#color set
+# color set
 black = (0,0,0)
 white = (255,255,255)
 red = (200,0,0)
@@ -23,11 +23,12 @@ bright_green = (0,255,0)
 block_color = (53,115,255)
 
 def TextObjects(text, font):
-    """change word to graph"""
+    """ Change word to graph """
     text_surface = font.render(text, True, black) 
     return text_surface, text_surface.get_rect()
 
 def Button(msg,x,y,w,h,ic,ac,action = None):
+    """ Create button"""
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     
@@ -39,7 +40,6 @@ def Button(msg,x,y,w,h,ic,ac,action = None):
     else:
         pygame.draw.rect(game_display, ic,(x,y,w,h))
 
-
     small_font = pygame.font.Font("freesansbold.ttf",20)
     text_surf, text_rect = TextObjects(msg, small_font)
     text_rect.center = ( (x+(w/2)), (y+(h/2)) )
@@ -47,25 +47,25 @@ def Button(msg,x,y,w,h,ic,ac,action = None):
 
 def BackgroundDisplay():
     """Not-moving objects display"""
-    #background
+    # background
     game_display.fill(white)
     background_photo = pygame.image.load('background_test.png')
     background_image_size = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
     game_display.blit(background_image_size, [0, 0])
 
-    #title
+    # title
     game_font = pygame.font.Font('JT1-09U.TTF', 60)
     title_name, title_rect = TextObjects("小傑下樓梯~", game_font)
     title_rect.center = ((display_width * 0.8), (display_height * 0.05))
     game_display.blit(title_name, title_rect)
 
-    #history highest score
+    # history highest score
     game_font = pygame.font.Font('JT1-09U.TTF', 36)
     title_name, title_rect = TextObjects("歷史高分：", game_font)
     title_rect.center = ((display_width * 0.68), (display_height * 0.15))
     game_display.blit(title_name, title_rect)
 
-    #User name and photo
+    # User name and photo
     user_image = pygame.image.load('lckung.png')
     user_image_size = pygame.transform.scale(user_image, (int(display_width * 0.05), int(display_height * 0.1)))
     game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.2])
@@ -75,23 +75,18 @@ def BackgroundDisplay():
     user_rect.center = ((display_width * 0.72), (display_height * 0.25))
     game_display.blit(user_name, user_rect)
 
-    #Current score
+    # Current score
     game_font = pygame.font.Font('JT1-09U.TTF', 48)
     title_name, title_rect = TextObjects("現在分數：", game_font)
     title_rect.center = ((display_width * 0.7), (display_height * 0.35))
     game_display.blit(title_name, title_rect)
 
-    #Life
+    # Life
     game_font = pygame.font.Font('JT1-09U.TTF', 48)
     title_name, title_rect = TextObjects("命：", game_font)
     title_rect.center = ((display_width * 0.65), (display_height * 0.45))
     game_display.blit(title_name, title_rect)
 
-    """
-    life_space = pygame.image.load('lifespace.png')
-    #background_image_size = pygame.transform.scale(life_space, (int(display_width * 0.1), int(display_height * 0.05)))
-    game_display.blit(life_space, [display_width * 0.68, display_height * 0.4])
-    """
     for i in range(12):
         pygame.draw.rect(game_display, black,[display_width*(0.7+0.0195*i), display_height*0.42, display_width*0.02, display_height*0.06],1) 
      
@@ -100,9 +95,8 @@ def BackgroundDisplay():
     Button("Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, red, bright_red,action = GameStart)
 
 
-"""
-Button Motion
-""" 
+""" Button Motion """ 
+
 def Paused():
     global pause   
     
@@ -139,7 +133,6 @@ def QuitGame():
 
 
 '''
-
 #initial stair list
 stair_list = []
 stair_number = 8 #how many stairs
@@ -156,7 +149,7 @@ def GraphicDisplay():
     #person
     person_photo = pygame.image.load('.png')
     life_photo = pygame.image.load('.png')
-    person = Person(width, height, x, y, person_photo, 12, life_photo)
+    person = Person(width, height, x, y, person_photo)
     person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
     person.life_photo = pygame.transform.scale(life_photo, (int(display_width * 0.6), display_height))
   
@@ -174,7 +167,6 @@ def GraphicDisplay():
         pygame.draw.rect(game_display, red,[display_width*(0.7+0.0195*i), display_height*0.42, display_width*0.019, display_height*0.059]) 
      
     #points
-
 
 def StairMoving():
     """Complicated moving about stairs"""
@@ -206,7 +198,6 @@ def GameLoop():
         BackgroundDisplay()
         GraphicDisplay()
 
-
         for event in pygame.event.get():
             #Quit
             if event.type == pygame.QUIT:
@@ -218,10 +209,8 @@ def GameLoop():
                 if event.key == pygame.K_SPACE:
                     Paused()
 
-
         pygame.display.update()
         clock.tick(60)
-
 
 def GameEnd():
     pass
