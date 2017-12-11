@@ -4,7 +4,7 @@ import random
 #import Person
 #import Stair
 
-#initiation and diaplay
+#initiation and display
 pygame.init() 
 
 display_width = 1200
@@ -23,7 +23,7 @@ bright_green = (0,255,0)
 block_color = (53,115,255)
 
 def TextObjects(text, font):
-    """change word to ghaph"""
+    """change word to graph"""
     text_surface = font.render(text, True, black) 
     return text_surface, text_surface.get_rect()
 
@@ -31,14 +31,14 @@ def Button(msg,x,y,w,h,ic,ac,action = None):
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     
-    #change color
+    # change color
     if x+w > mouse[0] > x and y+h > mouse[1] > y:
         pygame.draw.rect(game_display, ac,(x,y,w,h))
-        
         if click[0] == 1 and action != None:
             action()
     else:
         pygame.draw.rect(game_display, ic,(x,y,w,h))
+
 
     small_font = pygame.font.Font("freesansbold.ttf",20)
     text_surf, text_rect = TextObjects(msg, small_font)
@@ -49,8 +49,8 @@ def BackgroundDisplay():
     """Not-moving objects display"""
     #background
     game_display.fill(white)
-    background_image = pygame.image.load('background_test.png')
-    background_image_size = pygame.transform.scale(background_image, (int(display_width * 0.6), display_height))
+    background_photo = pygame.image.load('background_test.png')
+    background_image_size = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
     game_display.blit(background_image_size, [0, 0])
 
     #title
@@ -87,6 +87,14 @@ def BackgroundDisplay():
     title_rect.center = ((display_width * 0.65), (display_height * 0.45))
     game_display.blit(title_name, title_rect)
 
+    """
+    life_space = pygame.image.load('lifespace.png')
+    #background_image_size = pygame.transform.scale(life_space, (int(display_width * 0.1), int(display_height * 0.05)))
+    game_display.blit(life_space, [display_width * 0.68, display_height * 0.4])
+    """
+    for i in range(12):
+        pygame.draw.rect(game_display, black,[display_width*(0.7+0.0195*i), display_height*0.42, display_width*0.02, display_height*0.06],1) 
+     
     #Pause and Restart(Button)
     Button("Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, green, bright_green,action = Paused)
     Button("Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, red, bright_red,action = GameStart)
@@ -94,26 +102,40 @@ def BackgroundDisplay():
 
 """
 Button Motion
-"""
-
+""" 
 def Paused():
-    #largeText = pygame.font.SysFont("freesansbold",115)
-    TextSurf, TextRect = TextObjects("Paused", largeText)
-    TextRect.center = ((display_width/2),(display_height/2))
-    gameDisplay.blit(TextSurf, TextRect)
+    global pause   
+    
+    # Remove original button
+    pygame.draw.rect(game_display, white,(display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1))
+    pygame.draw.rect(game_display, white,(display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1))
 
+    pause = True
+    large_text = pygame.font.Font("freesansbold.ttf",115)
+    text_surf, text_rect = TextObjects("Paused", large_text)
+    text_rect.center = ((display_width * 0.6 /2),(display_height * 0.4))
+    
     while pause:
+        game_display.blit(text_surf, text_rect)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
                 
-        button("Continue",150,450,100,50,green,bright_green,unpause)
-        button("Quit",550,450,100,50,red,bright_red,quitgame)
+        Button("Continue",display_width * 0.1,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2,green,bright_green,Unpause)
+        Button("Quit",display_width * 0.4,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2,red,bright_red,QuitGame)
 
         pygame.display.update()
         clock.tick(15)
 
+def Unpause():
+    global pause
+    pause = False
+
+def QuitGame():
+    pygame.quit()
+    quit()
 
 
 '''
@@ -121,15 +143,23 @@ def Paused():
 #initial stair list
 stair_list = []
 stair_number = 8 #how many stairs
+stair_photo = pygame.image.load('.png')
 for i in range(stair_number):
-    stair_list.append(Stair())
+    new_stair = Stair()
+    stair_list.append(new_stair)
 '''
 
 def GraphicDisplay():
     """Moving objects display"""
 
+    '''
     #person
-    person = Person()
+    person_photo = pygame.image.load('.png')
+    life_photo = pygame.image.load('.png')
+    person = Person(width, height, x, y, person_photo, 12, life_photo)
+    person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
+    person.life_photo = pygame.transform.scale(life_photo, (int(display_width * 0.6), display_height))
+  
     game_display.blit(person.photo, [person.x, person.y])
 
     #stairs
@@ -137,14 +167,13 @@ def GraphicDisplay():
     for i in range(stair_number):
         stair = stair_list[i]
         game_display.blit(stair.photo, [stair.x, stair.y])
-
+    '''
     #life
-    for i in range(person.life_count):
-        game_display.blit(person.life_photo, [int(display_width * 0.8) + i * 20, int(display_height * 0.2)])
-
+    #for i in range(person.life_count):
+    for i in range(5):   
+        pygame.draw.rect(game_display, red,[display_width*(0.7+0.0195*i), display_height*0.42, display_width*0.019, display_height*0.059]) 
+     
     #points
-
-
 
 
 def StairMoving():
@@ -152,7 +181,8 @@ def StairMoving():
     #Just checking the first one
     if stair_list[0].y < 0:
         stair_list.pop(0)
-        stair_list.append(Stair())
+        next_stair = Stair()
+        stair_list.append(next_stair)
 
 #
 crashed = False 
@@ -165,10 +195,6 @@ def GameStart():
 #LOOP(Logic of the game)
 def GameLoop():
 
-
-
-    global pause
-
     gameExit = False
     while not gameExit:
         #Update and Display
@@ -178,16 +204,20 @@ def GameLoop():
             stair_list[i].Update()
         '''
         BackgroundDisplay()
-        #GraphicDisplay()
+        GraphicDisplay()
 
 
         for event in pygame.event.get():
+            #Quit
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
-            #if event
-               # pause = True
-               # paused()
+
+            #Press Space to Pause
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    Paused()
+
 
         pygame.display.update()
         clock.tick(60)
