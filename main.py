@@ -4,7 +4,7 @@ import random
 #import Person
 #import Stair
 
-#initiation and diaplay
+#initiation and display
 pygame.init() 
 
 display_width = 1200
@@ -23,7 +23,7 @@ bright_green = (0,255,0)
 block_color = (53,115,255)
 
 def TextObjects(text, font):
-    """change word to ghaph"""
+    """change word to graph"""
     text_surface = font.render(text, True, black) 
     return text_surface, text_surface.get_rect()
 
@@ -49,8 +49,8 @@ def BackgroundDisplay():
     """Not-moving objects display"""
     #background
     game_display.fill(white)
-    life_photo = pygame.image.load('background_test.png')
-    background_image_size = pygame.transform.scale(life_photo, (int(display_width * 0.6), display_height))
+    background_photo = pygame.image.load('background_test.png')
+    background_image_size = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
     game_display.blit(background_image_size, [0, 0])
 
     #title
@@ -87,6 +87,14 @@ def BackgroundDisplay():
     title_rect.center = ((display_width * 0.65), (display_height * 0.45))
     game_display.blit(title_name, title_rect)
 
+    """
+    life_space = pygame.image.load('lifespace.png')
+    #background_image_size = pygame.transform.scale(life_space, (int(display_width * 0.1), int(display_height * 0.05)))
+    game_display.blit(life_space, [display_width * 0.68, display_height * 0.4])
+    """
+    for i in range(12):
+        pygame.draw.rect(game_display, black,[display_width*(0.7+0.0195*i), display_height*0.42, display_width*0.02, display_height*0.06],1) 
+     
     #Pause and Restart(Button)
     Button("Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, green, bright_green,action = Paused)
     Button("Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, red, bright_red,action = GameStart)
@@ -98,7 +106,7 @@ Button Motion
 def Paused():
     global pause   
     
-    # remove orignal button
+    # Remove original button
     pygame.draw.rect(game_display, white,(display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1))
     pygame.draw.rect(game_display, white,(display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1))
 
@@ -144,6 +152,7 @@ for i in range(stair_number):
 def GraphicDisplay():
     """Moving objects display"""
 
+    '''
     #person
     person_photo = pygame.image.load('.png')
     life_photo = pygame.image.load('.png')
@@ -158,11 +167,12 @@ def GraphicDisplay():
     for i in range(stair_number):
         stair = stair_list[i]
         game_display.blit(stair.photo, [stair.x, stair.y])
-
+    '''
     #life
-    for i in range(person.life_count):
-        game_display.blit(person.life_photo, [int(display_width * 0.8) + i * 20, int(display_height * 0.2)])
-
+    #for i in range(person.life_count):
+    for i in range(5):   
+        pygame.draw.rect(game_display, red,[display_width*(0.7+0.0195*i), display_height*0.42, display_width*0.019, display_height*0.059]) 
+     
     #points
 
 
@@ -194,7 +204,7 @@ def GameLoop():
             stair_list[i].Update()
         '''
         BackgroundDisplay()
-        #GraphicDisplay()
+        GraphicDisplay()
 
 
         for event in pygame.event.get():
