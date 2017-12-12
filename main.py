@@ -49,7 +49,7 @@ def BackgroundDisplay():
     """Not-moving objects display"""
     # background
     game_display.fill(white)
-    background_photo = pygame.image.load('background_test.png')
+    background_photo = pygame.image.load('OriginalBackground.png')
     background_image_size = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
     game_display.blit(background_image_size, [0, 0])
 
