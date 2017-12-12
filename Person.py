@@ -10,12 +10,13 @@ class Person:
         self.life_count = 12
         self.display_width = display_width
         self.display_height = display_height
-
-'''     def Photo(self):
+    '''
+    def Photo(self):
         if i = 1:
             return picture1
         if i = 2: 
-            return picture2 '''
+            return picture2 
+    '''
 
         
     def Update(self, events):
