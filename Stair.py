@@ -4,11 +4,11 @@ class Stair:
     
     def __init__(self, main_width):
         """attributes of stair"""        
-        type_number = random.randint(0, 2)
-        if type_number == 0:
+        type_number = random.randint(0, 10)
+        if type_number in (0, 1, 2, 3, 4):
             self.type = "general"
             self.photo = "xxx.png"     #連結到不同樓梯的圖
-        elif type_number == 1:
+        elif type_number in (5, 6, 7):
             self.type = "hurt"
             self.photo = "xxx.png"
         else:
