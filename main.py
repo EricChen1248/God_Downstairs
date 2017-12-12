@@ -1,7 +1,7 @@
 import pygame
 import time
 import random
-# import Person
+import Person
 # import Stair
 
 # initiation and display
@@ -21,6 +21,9 @@ green = (0,200,0)
 bright_red = (255,0,0)
 bright_green = (0,255,0)
 block_color = (53,115,255)
+
+person = None
+background_photo = None
 
 def TextObjects(text, font):
     """ Change word to graph """
@@ -45,13 +48,10 @@ def Button(msg,x,y,w,h,ic,ac,action = None):
     text_rect.center = ( (x+(w/2)), (y+(h/2)) )
     game_display.blit(text_surf, text_rect) 
 
-def BackgroundDisplay():
+def NonMovingBackgroundDisplay():
     """Not-moving objects display"""
     # background
     game_display.fill(white)
-    background_photo = pygame.image.load('OriginalBackground.png')
-    background_image_size = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
-    game_display.blit(background_image_size, [0, 0])
 
     # title
     game_font = pygame.font.Font('JT1-09U.TTF', 60)
@@ -90,6 +90,15 @@ def BackgroundDisplay():
     for i in range(12):
         pygame.draw.rect(game_display, black,[display_width*(0.7+0.0195*i), display_height*0.42, display_width * 0.02 , display_height*0.06],1) 
 
+def BackgroundDisplay():
+    global background_photo
+    game_display.blit(background_photo, [0, 0])
+
+def Init():
+    global background_photo
+    background_photo = pygame.image.load('BackgroundIce.png')
+    background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
+    
 
 """ Button Motion """ 
 
@@ -131,7 +140,7 @@ def QuitGame():
 '''
 #initial stair list
 stair_list = []
-stair_number = 8 #how many stairs
+stair_number = 8 # how many stairs
 stair_photo = pygame.image.load('.png')
 for i in range(stair_number):
     new_stair = Stair()
@@ -140,17 +149,12 @@ for i in range(stair_number):
 
 def GraphicDisplay():
     """Moving objects display"""
-
-    '''
+   
     #person
-    person_photo = pygame.image.load('.png')
-    life_photo = pygame.image.load('.png')
-    person = Person(width, height, x, y, person_photo)
-    person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
-    person.life_photo = pygame.transform.scale(life_photo, (int(display_width * 0.6), display_height))
-  
+    global person
     game_display.blit(person.photo, [person.x, person.y])
 
+    '''
     #stairs
     StairMoving()
     for i in range(stair_number):
@@ -180,25 +184,34 @@ def StairMoving():
 crashed = False 
 pause = False
 
-def GameStart():
-    pass
-
-
 #LOOP(Logic of the game)
 def GameLoop():
 
     gameExit = False
+
+    Init()
+    NonMovingBackgroundDisplay()
+
+    global person
+    person_photo = pygame.image.load('person.png')
+    person = Person.Person(40, 60, 350, 150, person_photo, display_width, display_height)
+    person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
+    
     while not gameExit:
+
         #Update and Display
+
+        events = pygame.event.get()
+        person.Update(events)
+
         '''
-        Person.Update()
         for i in range(stair_number):
             stair_list[i].Update()
         '''
         BackgroundDisplay()
         GraphicDisplay()
 
-        for event in pygame.event.get():
+        for event in events:
             #Quit
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -211,10 +224,6 @@ def GameLoop():
 
         pygame.display.update()
         clock.tick(60)
-
-def GameEnd():
-    pass
-
 
 def GameStart():
     """Define Game Intro screen"""
@@ -283,10 +292,6 @@ def GameStart():
 
         pygame.display.update()
         clock.tick(15)
-
-
-
-
 
 def GameEnd():
     """Define Game End Screen"""
