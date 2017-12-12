@@ -1,31 +1,35 @@
+import pygame
 import random
 
 class Stair:
     
-    def __init__(self, main_width):
+    def __init__(self, main_width, count):
         """attributes of stair"""        
         type_number = random.randint(0, 10)
-        if type_number in (0, 1, 2, 3, 4):
+        if 0 <= type_number <= 4:
             self.type = "general"
-            self.photo = "xxx.png"     #連結到不同樓梯的圖
-        elif type_number in (5, 6, 7):
+        elif 5 <= type_number <= 7:
             self.type = "hurt"
-            self.photo = "xxx.png"
         else:
             self.type = "cloud"
-            self.photo = "xxx.png"
+
         
-        self.width = 25   #假設圖片寬度是25
-        self.height = 10  #假設圖片長度是10
+        self.width = 150   #假設圖片寬度是150
+        self.height = 20  #假設圖片長度是20
         self.x = random.randint(0, main_width - self.width)  
-        self.y = self.length
+        self.y = 640 - 75 * (8 - count)
+        self.count = 0
             
-    def Update():
+    def Update(self, person):
         """be touched or not and its reaction"""
-        y -= 10    #所有樓梯不斷上升
-        if (Person.y + Person.height) == self.y and self.x <= (Person.x + Person.width) <= (self.x + self.width + Person.width):         
-            if self.type = "general":
-                Person.General()
-            elif self.type = "hurt":
-                Person.Hurt()
-    
+        self.y -= 2    #所有樓梯不斷上升
+        if self.y + self.height > (person.y + person.height - 2) > self.y and self.x <= (person.x + person.width) <= (self.x + self.width + person.width):         
+            if self.type == "general":
+                self.count += 1
+                person.General(self.count)
+            elif self.type == "hurt":
+                self.count += 1
+                person.Hurt(self.count)
+            elif self.type == "cloud":
+                self.count += 1
+                person.Cloud(self.count)

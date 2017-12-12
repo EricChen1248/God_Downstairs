@@ -2,8 +2,12 @@ import pygame
 import time
 import random
 import Person
-# import Stair
+import Stair
+import gc
+import os
 
+# Starting window position
+os.environ['SDL_VIDEO_WINDOW_POS'] = '20,34'
 # initiation and display
 pygame.init() 
 
@@ -25,9 +29,9 @@ block_color = (53,115,255)
 person = None
 background_photo = None
 
-def TextObjects(text, font):
+def TextObjects(text, font, color = black):
     """ Change word to graph """
-    text_surface = font.render(text, True, black) 
+    text_surface = font.render(text, True, color) 
     return text_surface, text_surface.get_rect()
 
 def Button(msg,x,y,w,h,ic,ac,action = None):
@@ -43,7 +47,7 @@ def Button(msg,x,y,w,h,ic,ac,action = None):
     else:
         pygame.draw.rect(game_display, ic,(x,y,w,h))
 
-    small_font = pygame.font.Font("freesansbold.ttf",20)
+    small_font = pygame.font.Font("freesansbold.ttf",32)
     text_surf, text_rect = TextObjects(msg, small_font)
     text_rect.center = ( (x+(w/2)), (y+(h/2)) )
     game_display.blit(text_surf, text_rect) 
@@ -99,7 +103,6 @@ def Init():
     background_photo = pygame.image.load('BackgroundIce.png')
     background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
     
-
 """ Button Motion """ 
 
 def Paused():
@@ -110,8 +113,9 @@ def Paused():
     pygame.draw.rect(game_display, white,(display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1))
 
     pause = True
+    #pygame.draw.rect(game_display, red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
     large_text = pygame.font.Font("freesansbold.ttf",115)
-    text_surf, text_rect = TextObjects("Paused", large_text)
+    text_surf, text_rect = TextObjects("Paused", large_text, red)
     text_rect.center = ((display_width * 0.6 /2),(display_height * 0.4))
     
     while pause:
@@ -136,16 +140,9 @@ def QuitGame():
     pygame.quit()
     quit()
 
-
-'''
-#initial stair list
-stair_list = []
-stair_number = 8 # how many stairs
-stair_photo = pygame.image.load('.png')
-for i in range(stair_number):
-    new_stair = Stair()
-    stair_list.append(new_stair)
-'''
+def Restart():
+    global game_exit
+    game_exit = True
 
 def GraphicDisplay():
     """Moving objects display"""
@@ -154,60 +151,94 @@ def GraphicDisplay():
     global person
     game_display.blit(person.photo, [person.x, person.y])
 
-    '''
+   
     #stairs
     StairMoving()
-    for i in range(stair_number):
+    global general_stair_photo
+    global hurt_stair_photo
+    global cloud_stair_photo
+
+    for i in range(8):
         stair = stair_list[i]
-        game_display.blit(stair.photo, [stair.x, stair.y])
-    '''
+        if stair.type == "general":
+            stair_photo = general_stair_photo
+        elif stair.type == "hurt":
+            stair_photo = hurt_stair_photo
+        else:
+            stair_photo = cloud_stair_photo
+
+        game_display.blit(stair_photo, [stair.x, stair.y])
+ 
     #life
-    #for i in range(person.life_count):
-    for i in range(5):   
+    life = person.life_count
+    for i in range(life): 
         pygame.draw.rect(game_display, red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
-     
+    for i in range(12 - life): 
+        pygame.draw.rect(game_display, white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+    
+
     #points
 
     #Pause and Restart(Button)
     Button("Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, green, bright_green,action = Paused)
-    Button("Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, red, bright_red,action = GameStart)
+    Button("Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, red, bright_red,action = Restart)
 
 def StairMoving():
     """Complicated moving about stairs"""
     #Just checking the first one
-    if stair_list[0].y < 0:
+    if stair_list[0].y < 35:
         stair_list.pop(0)
-        next_stair = Stair()
+        next_stair = Stair.Stair(display_width * 0.6, 8)
         stair_list.append(next_stair)
-
+        gc.collect() # 優化
 #
 crashed = False 
 pause = False
 
 #LOOP(Logic of the game)
 def GameLoop():
-
-    gameExit = False
+    global game_exit
+    game_exit = False
 
     Init()
     NonMovingBackgroundDisplay()
 
+    global general_stair_photo
+    general_stair_photo = pygame.image.load('Generalstairs.png')
+    general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
+    
+    global hurt_stair_photo
+    hurt_stair_photo = pygame.image.load('Generalstairs.png')
+    hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
+    
+    global cloud_stair_photo
+    cloud_stair_photo = pygame.image.load('Generalstairs.png')
+    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 20))
+
+    #initial stair list
+    global stair_list
+    stair_list = []
+    for i in range(8):
+        new_stair = Stair.Stair(display_width * 0.6, i)
+        stair_list.append(new_stair)
+    stair_list[2].x = 340
+
     global person
     person_photo = pygame.image.load('person.png')
-    person = Person.Person(40, 60, 350, 150, person_photo, display_width, display_height)
+    person = Person.Person(40, 40, 340+75-20, stair_list[2].y - 40, person_photo, display_width, display_height)
     person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
-    
-    while not gameExit:
+
+
+    while not game_exit:
 
         #Update and Display
 
         events = pygame.event.get()
         person.Update(events)
 
-        '''
-        for i in range(stair_number):
-            stair_list[i].Update()
-        '''
+        for i in range(8):
+            stair_list[i].Update(person)
+
         BackgroundDisplay()
         GraphicDisplay()
 
@@ -344,9 +375,6 @@ def GameEnd():
         pygame.display.update()
         clock.tick(15)
 
-
-
-GameStart()
-GameLoop()
-pygame.quit()
-quit()
+while not crashed:
+    GameStart()
+    GameLoop()

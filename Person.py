@@ -11,7 +11,13 @@ class Person:
         self.display_width = display_width
         self.display_height = display_height
 
+'''     def Photo(self):
+        if i = 1:
+            return picture1
+        if i = 2: 
+            return picture2 '''
 
+        
     def Update(self, events):
         ''' Update person's moving and life '''
         # Event Handling
@@ -35,31 +41,37 @@ class Person:
 
         # Handles verticla Movement
         self.y += 5                                    # 自然落下
-        if self.y > self.display_height:                     # 落下超過下邊線就GameEnd
-            GameEnd()
-        if self.y <= 0:                                 # 若頭刺到上面刺刺
-            self.y += 20                                # 繼續自然落下(從梯子上面被擠下)
+        if self.y > self.display_height:               # 落下超過下邊線就GameEnd
+            pass #GameEnd()
+        if self.y <= 40:                                 # 若頭刺到上面刺刺
+            self.y += 25                                # 繼續自然落下(從梯子上面被擠下)
             self.life_count += -5                       # 命減5
             if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
-                GameEnd()
+                pass#GameEnd()
 
-    def General(self):
+    def General(self,count):
         ''' 人碰到一般梯子時 '''
-        self.y += -20                                   # 若梯子是-10往上，要抵銷自然落下就要-20
-        if self.life_count < 12:                        # 若沒滿血就加一
-            self.life_count += 1
+        self.y += -7                                   # 若梯子是-10往上，要抵銷自然落下就要-20
+        if count == 1:
+            if self.life_count < 12:                        # 若沒滿血就加一
+                self.life_count += 1
             
-    def Hurt(self):
+    def Hurt(self, count):
         ''' 人碰到刺刺梯子時 '''
-        self.y += -20
-        self.life_count += -5                           # 命減5
-        if self.life_count <= 12:                       # 檢查是否死掉，死了就GameEnd
-            GameEnd()
+        self.y += -7
+        if count == 1:
+            self.life_count += -5                           # 命減5
+            if self.life_count <= 0:                       # 檢查是否死掉，死了就GameEnd
+                pass#GameEnd()
 
-    def Disappear(self):
+    def Cloud(self, count):
         ''' 人碰到消失梯子 '''
-        if self.life_count < 12:                        # 若沒滿血就加一
-            self.life_count += 1
+        if count == 1:
+            if self.life_count < 12:                        # 若沒滿血就加一
+                self.life_count += 1
+
+        if count <= 5:
+            self.y += -7
 
     
 
