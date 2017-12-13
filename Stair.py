@@ -24,12 +24,4 @@ class Stair:
         """be touched or not and its reaction"""
         self.y -= 2    #所有樓梯不斷上升
         if self.y + self.height > (person.y + person.height - 2) > self.y and self.x <= (person.x + person.width) <= (self.x + self.width + person.width):         
-            if self.type == "general":
-                self.count += 1
-                person.General(self.count)
-            elif self.type == "hurt":
-                self.count += 1
-                person.Hurt(self.count)
-            elif self.type == "cloud":
-                self.count += 1
-                person.Cloud(self.count)
+            person.HitStair(self)

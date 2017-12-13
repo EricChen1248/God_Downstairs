@@ -1,15 +1,52 @@
 import pygame
+import Helper
+
+display_width = None
+display_height = None
+
 class Person:
-    def __init__(self, width, height, x, y, photo, display_width, display_height):
+
+    def Hurt(self, stair):
+        ''' 人碰到刺刺梯子時 '''
+        if self.stair is not stair:
+            self.ReduceLife()
+
+    def Cloud(self, stair):
+        ''' 人碰到消失梯子 '''
+        # If cloud was not the same cloud as last time, reset count
+        if self.stair is not stair:
+            self.cloud_count = 5
+        else:
+            # Reduce count and check if below threshold
+            self.cloud_count -= 1
+            if self.cloud_count <= 0:
+                self.y += 14
+
+    def HitStair(self, stair):
+        self.y += -7
+        if self.stair is not stair:
+            if self.life_count < 12:
+                self.life_count += 1
+        self.stair_reaction[stair.type](stair)
+
+        self.stair = stair
+
+    def ReduceLife(self, reduce = 5):            
+        self.life_count -= reduce                   # 命減5
+        if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
+            Helper.GameEnd()
+
+    def __init__(self, width, height, x, y):
         self.width = width
         self.height = height
         self.x = x
         self.y = y
-        self.x_change = 0
-        self.photo = photo        
+        self.x_change = 0     
         self.life_count = 12
-        self.display_width = display_width
-        self.display_height = display_height
+        self.stair = None
+        self.cloud_count = 5
+        self.stair_reaction = {'general': Helper.EmptyFunction, 'hurt':self.Hurt, 'cloud':self.Cloud }
+        
     '''
     def Photo(self):
         if i = 1:
@@ -18,7 +55,6 @@ class Person:
             return picture2 
     '''
 
-        
     def Update(self, events):
         ''' Update person's moving and life '''
         # Event Handling
@@ -37,43 +73,18 @@ class Person:
         # Check horizontal bounds
         if self.x <= 0:                                 # 碰到左邊邊線不動
             self.x = 0
-        if self.x + self.width >= self.display_width * 0.6:  # 碰到右邊邊線不動
-            self.x = self.display_width * 0.6 - self.width
+        if self.x + self.width >= display_width * 0.6:  # 碰到右邊邊線不動
+            self.x = display_width * 0.6 - self.width
 
-        # Handles verticla Movement
+        # Handles vertical Movement
         self.y += 5                                    # 自然落下
-        if self.y > self.display_height:               # 落下超過下邊線就GameEnd
-            pass #GameEnd()
+        if self.y > display_height:               # 落下超過下邊線就GameEnd
+            Helper.GameEnd()
+
         if self.y <= 40:                                 # 若頭刺到上面刺刺
             self.y += 25                                # 繼續自然落下(從梯子上面被擠下)
-            self.life_count += -5                       # 命減5
-            if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
-                pass#GameEnd()
+            self.ReduceLife()
 
-    def General(self,count):
-        ''' 人碰到一般梯子時 '''
-        self.y += -7                                   # 若梯子是-10往上，要抵銷自然落下就要-20
-        if count == 1:
-            if self.life_count < 12:                        # 若沒滿血就加一
-                self.life_count += 1
-            
-    def Hurt(self, count):
-        ''' 人碰到刺刺梯子時 '''
-        self.y += -7
-        if count == 1:
-            self.life_count += -5                           # 命減5
-            if self.life_count <= 0:                       # 檢查是否死掉，死了就GameEnd
-                pass#GameEnd()
-
-    def Cloud(self, count):
-        ''' 人碰到消失梯子 '''
-        if count == 1:
-            if self.life_count < 12:                        # 若沒滿血就加一
-                self.life_count += 1
-
-        if count <= 5:
-            self.y += -7
-
-    
+           
 
 
