@@ -20,9 +20,37 @@ game_display = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('小傑下樓梯')
 clock = pygame.time.Clock() 
 
-person = None
-background_photo = None
 
+persons = []
+background_photo = None
+person_photo = None
+
+def Init():
+    global background_photo
+    background_photo = pygame.image.load('BackgroundIce.png')
+    background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
+
+    global general_stair_photo
+    general_stair_photo = pygame.image.load('Generalstairs.png')
+    general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
+    
+    global hurt_stair_photo
+    hurt_stair_photo = pygame.image.load('Generalstairs.png')
+    hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
+    
+    global cloud_stair_photo
+    cloud_stair_photo = pygame.image.load('Generalstairs.png')
+    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 20))
+
+    global person_photo 
+    person_photo = pygame.transform.scale(pygame.image.load('person.png'), (Person.width, Person.height))
+    Person.display_width = display_width
+    Person.display_height = display_height
+    Person.dead_count = Helper.players
+    global persons
+    persons = []
+    
+    
 def NonMovingBackgroundDisplay():
     """Not-moving objects display"""
     # background
@@ -57,44 +85,25 @@ def NonMovingBackgroundDisplay():
     game_display.blit(title_name, title_rect)
 
     # Life
-    game_font = pygame.font.Font('JT1-09U.TTF', 48)
-    title_name, title_rect = Helper.TextObjects("命：", game_font)
-    title_rect.center = ((display_width * 0.65), (display_height * 0.45))
-    game_display.blit(title_name, title_rect)
+    for j in range(Helper.players):
+        game_font = pygame.font.Font('JT1-09U.TTF', 48)
+        title_name, title_rect = Helper.TextObjects("命：", game_font)
+        title_rect.center = ((display_width * 0.65), (display_height * 0.45) + j * 60)
+        game_display.blit(title_name, title_rect)
 
-    for i in range(12):
-        pygame.draw.rect(game_display, Colors.black,[display_width*(0.7+0.0195*i), display_height*0.42, display_width * 0.02 , display_height*0.06],1) 
+        for i in range(12):
+            pygame.draw.rect(game_display, Colors.black,[display_width*(0.7+0.0195*i), display_height*0.42 + j * 60, display_width * 0.02 , display_height*0.06],1) 
 
 def BackgroundDisplay():
     global background_photo
     game_display.blit(background_photo, [0, 0])
 
-def Init():
-    global background_photo
-    background_photo = pygame.image.load('BackgroundIce.png')
-    background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
-
-    global general_stair_photo
-    general_stair_photo = pygame.image.load('Generalstairs.png')
-    general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
-    
-    global hurt_stair_photo
-    hurt_stair_photo = pygame.image.load('Generalstairs.png')
-    hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
-    
-    global cloud_stair_photo
-    cloud_stair_photo = pygame.image.load('Generalstairs.png')
-    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 20))
-
-    Person.display_width = display_width
-    Person.display_height = display_height
-    
 def GraphicDisplay():
     """Moving objects display"""
    
     #person
-    global person
-    game_display.blit(person.photo, [person.x, person.y])
+    for person in persons:
+        game_display.blit(person.photo, [person.x, person.y])
 
     #stairs
     StairMoving()
@@ -114,11 +123,13 @@ def GraphicDisplay():
         game_display.blit(stair_photo, [stair.x, stair.y])
  
     #life
-    life = person.life_count
-    for i in range(life): 
-        pygame.draw.rect(game_display,Colors.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
-    for i in range(12 - life): 
-        pygame.draw.rect(game_display, Colors.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+    for j in range(Helper.players):
+        person = persons[j]
+        life = person.life_count
+        for i in range(life): 
+            pygame.draw.rect(game_display,Colors.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 1 + j * 60, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+        for i in range(12 - life): 
+            pygame.draw.rect(game_display, Colors.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 1 + j * 60, display_width * 0.02 - 2, display_height*0.06 - 2]) 
     
 
     #points
@@ -159,9 +170,11 @@ def GameLoop():
         stair_list.append(new_stair)
     stair_list[2].x = 340
 
-    global person
-    person = Person.Person(40, 40, 340 + 75 - 20, stair_list[2].y - 40,)
-    person.photo = pygame.transform.scale(pygame.image.load('person.png'), (person.width, person.height))
+    global persons
+    global person_photo
+    for i in range(Helper.players):
+        persons.append(Person.Person(340 + 75 - 20 + i * 30, stair_list[2].y - 40, i))
+        persons[-1].photo = person_photo
 
 
     while not game_exit:
@@ -171,10 +184,11 @@ def GameLoop():
 
             # Update Stairs
             for i in range(8):
-                stair_list[i].Update(person)
+                stair_list[i].Update(persons)
 
             # Update person
-            person.Update(events)
+            for person in persons:
+                person.Update(events)
 
             # Redraw Background Display -> Foreground Display
             BackgroundDisplay()

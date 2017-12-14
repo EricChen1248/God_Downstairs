@@ -8,6 +8,7 @@ display_height = None
 clock = None
 
 skip_start = False
+players = 1
 
 def Init(display, width, height, oClock):
     global game_display
@@ -65,16 +66,15 @@ def GameStart():
                         Colors.red, Colors.bright_red, TogglePlayer1)
    
     def TogglePlayer2():
-        nonlocal players
+        global players
         players = 2
         clock.tick(20)
 
     def TogglePlayer1():
-        nonlocal players
+        global players
         players = 1
         clock.tick(20)
 
-    players = 1
     while intro:
         for event in pygame.event.get():    
             if event.type == pygame.QUIT:

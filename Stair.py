@@ -1,5 +1,6 @@
 import pygame
 import random
+import Person
 
 width = 150
 height = 20
@@ -22,8 +23,9 @@ class Stair:
         self.y = 640 - 75 * (8 - count)
         self.count = 0
             
-    def Update(self, person):
+    def Update(self, persons):
         """ be touched or not and its reaction """
         self.y -= 2             # 所有樓梯不斷上升
-        if self.y + self.height > (person.y + person.height - 2) > self.y and self.x <= (person.x + person.width) <= (self.x + self.width + person.width):         
-            person.HitStair(self)
+        for person in persons:
+            if self.y + self.height > (person.y + Person.height - 2) > self.y and self.x <= (person.x + Person.width) <= (self.x + self.width + Person.width):         
+                person.HitStair(self)
