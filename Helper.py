@@ -105,6 +105,7 @@ def GameEnd():
     def Restart():
         global skip_start
         skip_start = True
+        clock.tick(20)
         raise Exceptions.GameOverException
 
     fail = True
@@ -136,13 +137,12 @@ def GameEnd():
         # Quit
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                QuitGame()
+                
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    Restart()
                
-        # Background and text display
-        
-
-
         RestartButton()
         # if score > highest_score:            # highest score用global，一開始就抓
 
