@@ -94,9 +94,18 @@ def NonMovingBackgroundDisplay():
         for i in range(12):
             pygame.draw.rect(game_display, Colors.black,[display_width*(0.7+0.0195*i), display_height*0.42 + j * 60, display_width * 0.02 , display_height*0.06],1) 
 
-def BackgroundDisplay():
+    
     global background_photo
     game_display.blit(background_photo, [0, 0])
+
+def BackgroundDisplay():
+    global background_photo
+    for person in persons:
+        if person.alive:
+            game_display.blit(background_photo, [person.x, person.y], (person.x, person.y, Person.width, Person.height))
+
+    for stair in stair_list:
+        game_display.blit(background_photo, [stair.x, stair.y], (stair.x, stair.y, Stair.width, Stair.height))
 
 def GraphicDisplay():
     """Moving objects display"""
@@ -177,22 +186,29 @@ def GameLoop():
         persons.append(Person.Person(340 + 75 - 20 + i * 30, stair_list[2].y - 40, i))
         persons[-1].photo = person_photo
 
-
     while not game_exit:
         try:
+            BackgroundDisplay()
+
             # Save events
             events = pygame.event.get()
 
             # Update Stairs
             for i in range(8):
-                stair_list[i].Update(persons)
+                stair_list[i].Update()
 
             # Update person
             for person in persons:
+                try:
+                    stair_list[(person.y - 33)// 75].HitStair(person)
+                    stair_list[(person.y - 33)// 75 + 1].HitStair(person)
+                except:
+                    pass
                 person.Update(events)
 
+
+
             # Redraw Background Display -> Foreground Display
-            BackgroundDisplay()
             GraphicDisplay()
 
             for event in events:

@@ -23,9 +23,10 @@ class Stair:
         self.y = 640 - 75 * (8 - count)
         self.count = 0
             
-    def Update(self, persons):
+    def Update(self):
         """ be touched or not and its reaction """
         self.y -= 2             # 所有樓梯不斷上升
-        for person in persons:
-            if self.y + self.height > (person.y + Person.height - 2) > self.y and self.x <= (person.x + Person.width) <= (self.x + self.width + Person.width):         
-                person.HitStair(self)
+    
+    def HitStair(self, person):
+        if self.y + self.height > (person.y + Person.height - 2) > self.y and self.x <= (person.x + Person.width) <= (self.x + self.width + Person.width):         
+            person.HitStair(self)
