@@ -38,11 +38,7 @@ class Person:
     def ReduceLife(self, reduce = 5):            
         self.life_count -= reduce                   # 命減5
         if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
-            self.alive = False
-            global dead_count
-            dead_count -= 1
-            if dead_count <= 0:
-                Helper.GameEnd()
+            self.Death()
 
     def __init__(self, x, y, player_number):
         self.alive = True
@@ -97,16 +93,19 @@ class Person:
         # Handles vertical Movement
         self.y += 5                                     # 自然落下
         if self.y > display_height:                     # 落下超過下邊線就GameEnd
-            self.alive = False
-            global dead_count
-            dead_count -= 1
-            if dead_count <= 0:
-                Helper.GameEnd()
+            self.Death()
 
         if self.y <= 40:                                # 若頭刺到上面刺刺
             self.y += 25                                # 繼續自然落下(從梯子上面被擠下)
             self.ReduceLife()
 
-           
+    def Death(self):
+        self.alive = False
+        global dead_count
+        self.life_count = 0
+        dead_count -= 1
+        if dead_count <= 0:
+            Helper.GameEnd()
+
 
 
