@@ -1,6 +1,7 @@
 import pygame
 import Colors
 import Exceptions
+import sys
 
 game_display = None
 display_width = None
@@ -151,7 +152,7 @@ def GameEnd():
 
 def QuitGame():
     pygame.quit()
-    quit()
+    sys.exit()
 
 def Paused():
     
