@@ -103,7 +103,8 @@ def GraphicDisplay():
    
     #person
     for person in persons:
-        game_display.blit(person.photo, [person.x, person.y])
+        if person.alive:
+            game_display.blit(person.photo, [person.x, person.y])
 
     #stairs
     StairMoving()
