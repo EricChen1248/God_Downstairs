@@ -1,13 +1,15 @@
-import pygame
-import time
-import random
-import Person
-import Stair
 import gc
 import os
-import Helper
+import random
+import time
+
+import pygame
+
 import Colors
 import Exceptions
+import Helper
+import Person
+import Stair
 
 # Starting window position
 os.environ['SDL_VIDEO_WINDOW_POS'] = '20,34'
@@ -23,7 +25,6 @@ pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
 display_width = 1200
 display_height = 640
 pygame.display.set_caption('小傑下樓梯')
-clock = pygame.time.Clock() 
 
 def Init():
     # Initialize Background
@@ -164,6 +165,7 @@ def GameLoop():
         new_stair = Stair.Stair(display_width * 0.6, i)
         stair_list.append(new_stair)
     stair_list[2].x = 340
+    stair_list[2].type = "general"
 
     global persons
     persons = []
@@ -176,8 +178,8 @@ def GameLoop():
 
     Helper.persons = persons
     Helper.UpdateLife()
+
     while not game_exit:
-        try:
             BackgroundDisplay()
 
             # Save events
@@ -208,15 +210,15 @@ def GameLoop():
                         Helper.Paused()
 
             pygame.display.update()
-            clock.tick(120)
+            clock.tick(60)
 
-        except Exceptions.GameOverException:
-            game_exit = True
         
 crashed = False
+clock = pygame.time.Clock() 
+game_display = pygame.display.set_mode((display_width,display_height),pygame.DOUBLEBUF)
+Helper.Init(game_display, display_width, display_height, clock)
 while not crashed:
 
-    game_display = pygame.display.set_mode((display_width,display_height))
     persons = []
     background_photo = None
     person_photo = None
@@ -224,7 +226,6 @@ while not crashed:
     
     pause = False
     
-    Helper.Init(game_display, display_width, display_height, clock)
     
     if not Helper.skip_start:
         Helper.GameStart()
@@ -232,6 +233,9 @@ while not crashed:
         # Reset skip_start to False
         Helper.skip_start = False
     
-    GameLoop()
+    try:
+        GameLoop()
+    except Exceptions.GameOverException:
+        pass
 
 Helper.QuitGame()
