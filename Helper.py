@@ -9,6 +9,7 @@ clock = None
 
 skip_start = False
 players = 1
+persons = []
 
 def Init(display, width, height, oClock):
     global game_display
@@ -185,6 +186,16 @@ def Paused():
 
         pygame.display.update()
         clock.tick(15)
+
+def UpdateLife():
+    count = 0
+    for person in persons:
+        life = person.life_count
+        for i in range(life): 
+            pygame.draw.rect(game_display,Colors.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 1 + count * 60, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+        for i in range(12 - life): 
+            pygame.draw.rect(game_display, Colors.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 1 + count * 60, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+        count += 1
 
 def TextObjects(text, font, color = Colors.black):
     """ Change word to graph """

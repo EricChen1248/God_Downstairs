@@ -1,5 +1,6 @@
 import pygame
 import Helper
+import Stair
 
 display_width = None
 display_height = None
@@ -13,7 +14,7 @@ class Person:
     def Hurt(self, stair):
         ''' 人碰到刺刺梯子時 '''
         if self.stair is not stair:
-            self.ReduceLife()
+            self.UpdateLife(-6)
 
     def Cloud(self, stair):
         ''' 人碰到消失梯子 '''
@@ -29,16 +30,18 @@ class Person:
     def HitStair(self, stair):
         self.y += -7
         if self.stair is not stair:
-            if self.life_count < 12:
-                self.life_count += 1
+            self.UpdateLife(1)
         self.stair_reaction[stair.type](stair)
 
         self.stair = stair
 
-    def ReduceLife(self, reduce = 5):            
-        self.life_count -= reduce                   # 命減5
+    def UpdateLife(self, reduce = -5):            
+        self.life_count += reduce                   # 命減5
+        if self.life_count > 12:
+            self.life_count = 12
         if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
             self.Death()
+        Helper.UpdateLife()
 
     def __init__(self, x, y, player_number):
         self.alive = True
@@ -69,6 +72,7 @@ class Person:
         if self.alive == False:
             return
         ''' Update person's moving and life '''
+
         # Event Handling
         for event in events:
             if event.type == pygame.KEYDOWN:            # 若按鍵被按下
@@ -96,8 +100,8 @@ class Person:
             self.Death()
 
         if self.y <= 40:                                # 若頭刺到上面刺刺
-            self.y += 25                                # 繼續自然落下(從梯子上面被擠下)
-            self.ReduceLife()
+            Stair.stair_list[0].fall_through = True
+            self.UpdateLife()
 
     def Death(self):
         self.alive = False
