@@ -25,10 +25,10 @@ class Person:
             # Reduce count and check if below threshold
             self.cloud_count -= 1
             if self.cloud_count <= 0:
-                self.y += 14
+                stair.fall_through = True
 
     def HitStair(self, stair):
-        self.y += -7
+        self.y = stair.y - height
         if self.stair is not stair:
             self.UpdateLife(1)
         self.stair_reaction[stair.type](stair)
@@ -89,10 +89,10 @@ class Person:
         self.x += self.direction[-1]
 
         # Check horizontal bounds
-        if self.x <= 0:                                 # 碰到左邊邊線不動
-            self.x = 0
-        if self.x + width >= display_width * 0.6:       # 碰到右邊邊線不動
-            self.x = display_width * 0.6 - width
+        if self.x < 31:                                 # 碰到左邊邊線不動
+            self.x = 31
+        if self.x + width > display_width * 0.6 - 31:       # 碰到右邊邊線不動
+            self.x = display_width * 0.6 - width - 31
 
         # Handles vertical Movement
         self.y += 5                                     # 自然落下

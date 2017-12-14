@@ -21,7 +21,7 @@ class Stair:
         
         self.width = width      # 假設圖片寬度是150
         self.height = height    # 假設圖片長度是20
-        self.x = random.randint(0, main_width - self.width)  
+        self.x = random.randint(31, main_width - self.width - 31)  
         self.y = 640 - 75 * (8 - count)
         self.fall_through = False
             
