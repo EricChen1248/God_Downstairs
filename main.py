@@ -14,16 +14,16 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = '20,34'
 # initiation and display
 pygame.init() 
 
+pygame.event.set_allowed(pygame.QUIT)
+pygame.event.set_allowed(pygame.KEYDOWN)
+pygame.event.set_allowed(pygame.KEYUP)
+pygame.event.set_allowed(pygame.MOUSEBUTTONUP)
+pygame.event.set_allowed(pygame.MOUSEBUTTONDOWN)
+
 display_width = 1200
 display_height = 640
-game_display = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('小傑下樓梯')
 clock = pygame.time.Clock() 
-
-persons = []
-background_photo = None
-person_photo = None
-stair_list = []
 
 def Init():
     # Initialize Background
@@ -132,14 +132,11 @@ def GraphicDisplay():
 
         game_display.blit(stair_photo, [stair.x, stair.y])
  
-    #points
+    # points
 
-    #Pause and Restart(Button)
+    # Pause and Restart(Button)
     Helper.Button("Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, Colors.green, Colors.bright_green,action = Helper.Paused)
     Helper.Button("Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1,Colors.red, Colors.bright_red,action = Restart)
-
-crashed = False 
-pause = False
 
 def Restart():
     raise Exceptions.GameOverException
@@ -153,10 +150,8 @@ def StairMoving():
         stair_list.append(next_stair)
         gc.collect() # 優化
 
-#LOOP(Logic of the game)
 def GameLoop():
-    
-    global game_exit
+    """ Core Game Loop """
     game_exit = False
 
     Init()
@@ -171,6 +166,7 @@ def GameLoop():
     stair_list[2].x = 340
 
     global persons
+    persons = []
     global person_photo
     for i in range(Helper.players):
         persons.append(Person.Person(340 + 75 - 20 + i * 30, stair_list[2].y - 40, i))
@@ -181,7 +177,6 @@ def GameLoop():
     Helper.persons = persons
     Helper.UpdateLife()
     while not game_exit:
-        print(int(clock.get_fps()))
         try:
             BackgroundDisplay()
 
@@ -201,32 +196,36 @@ def GameLoop():
                     pass
                 person.Update(events)
 
-
-
             # Redraw Background Display -> Foreground Display
             GraphicDisplay()
 
             for event in events:
-                #Quit
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
+                    Helper.QuitGame()
 
-                #Press Space to Pause
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         Helper.Paused()
 
             pygame.display.update()
-            clock.tick(60)
+            clock.tick(120)
 
         except Exceptions.GameOverException:
             game_exit = True
         
-Helper.Init(game_display, display_width, display_height, clock)
-
+crashed = False
 while not crashed:
 
+    game_display = pygame.display.set_mode((display_width,display_height))
+    persons = []
+    background_photo = None
+    person_photo = None
+    stair_list = []
+    
+    pause = False
+    
+    Helper.Init(game_display, display_width, display_height, clock)
+    
     if not Helper.skip_start:
         Helper.GameStart()
     else:
@@ -234,3 +233,5 @@ while not crashed:
         Helper.skip_start = False
     
     GameLoop()
+
+Helper.QuitGame()
