@@ -30,7 +30,7 @@ person = None
 background_photo = None
 
 def TextObjects(text, font, color = black):
-    """ Change word to graph """
+    """ Change word to graphics """
     text_surface = font.render(text, True, color) 
     return text_surface, text_surface.get_rect()
 
@@ -204,7 +204,7 @@ def GameLoop():
     NonMovingBackgroundDisplay()
 
     global general_stair_photo
-    general_stair_photo = pygame.image.load('Generalstairs_1.jpg')
+    general_stair_photo = pygame.image.load('Generalstairs_2.jpg')
     general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
     
     global hurt_stair_photo
