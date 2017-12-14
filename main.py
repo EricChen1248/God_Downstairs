@@ -172,6 +172,21 @@ def GameLoop():
     Init()
     NonMovingBackgroundDisplay()
 
+<<<<<<< HEAD
+=======
+    global general_stair_photo
+    general_stair_photo = pygame.image.load('Generalstairs_1.jpg')
+    general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
+    
+    global hurt_stair_photo
+    hurt_stair_photo = pygame.image.load('Stingstairs.png')
+    hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
+    
+    global cloud_stair_photo
+    cloud_stair_photo = pygame.image.load('Cloudstairs.png')
+    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 40))
+
+>>>>>>> 90b890f... Add sting stairs and cloud stairs pictures
     #initial stair list
     global stair_list
     stair_list = []
