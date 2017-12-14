@@ -4,6 +4,8 @@ import Person
 
 width = 150
 height = 20
+
+stair_list = []
 class Stair:
     
     def __init__(self, main_width, count):
@@ -21,12 +23,14 @@ class Stair:
         self.height = height    # 假設圖片長度是20
         self.x = random.randint(0, main_width - self.width)  
         self.y = 640 - 75 * (8 - count)
-        self.count = 0
+        self.fall_through = False
             
     def Update(self):
         """ be touched or not and its reaction """
         self.y -= 2             # 所有樓梯不斷上升
     
     def HitStair(self, person):
+        if self.fall_through:
+            return
         if self.y + self.height > (person.y + Person.height - 2) > self.y and self.x <= (person.x + Person.width) <= (self.x + self.width + Person.width):         
             person.HitStair(self)

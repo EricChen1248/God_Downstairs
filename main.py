@@ -20,27 +20,29 @@ game_display = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('小傑下樓梯')
 clock = pygame.time.Clock() 
 
-
 persons = []
 background_photo = None
 person_photo = None
+stair_list = []
 
 def Init():
+    # Initialize Background
     global background_photo
     background_photo = pygame.image.load('BackgroundIce.png')
     background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
 
+    # Initialize Stairs
     global general_stair_photo
-    general_stair_photo = pygame.image.load('Generalstairs.png')
+    general_stair_photo = pygame.image.load('Generalstairs_2.jpg')
     general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
     
     global hurt_stair_photo
-    hurt_stair_photo = pygame.image.load('Generalstairs.png')
+    hurt_stair_photo = pygame.image.load('Stingstairs.png')
     hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
     
     global cloud_stair_photo
-    cloud_stair_photo = pygame.image.load('Generalstairs.png')
-    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 20))
+    cloud_stair_photo = pygame.image.load('Cloudstairs.png')
+    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 40))
 
     global person_photo 
     person_photo = pygame.transform.scale(pygame.image.load('person.png'), (Person.width, Person.height))
@@ -49,7 +51,6 @@ def Init():
     Person.dead_count = Helper.players
     global persons
     persons = []
-    
     
 def NonMovingBackgroundDisplay():
     """Not-moving objects display"""
@@ -105,7 +106,7 @@ def BackgroundDisplay():
             game_display.blit(background_photo, [person.x, person.y], (person.x, person.y, Person.width, Person.height))
 
     for stair in stair_list:
-        game_display.blit(background_photo, [stair.x, stair.y], (stair.x, stair.y, Stair.width, Stair.height))
+        game_display.blit(background_photo, [stair.x, stair.y], (stair.x, stair.y, Stair.width, Stair.height + 20)) # + 20 To accomodate for cloud size
 
 def GraphicDisplay():
     """Moving objects display"""
@@ -121,8 +122,7 @@ def GraphicDisplay():
     global hurt_stair_photo
     global cloud_stair_photo
 
-    for i in range(8):
-        stair = stair_list[i]
+    for stair in stair_list:
         if stair.type == "general":
             stair_photo = general_stair_photo
         elif stair.type == "hurt":
@@ -132,16 +132,6 @@ def GraphicDisplay():
 
         game_display.blit(stair_photo, [stair.x, stair.y])
  
-    #life
-    for j in range(Helper.players):
-        person = persons[j]
-        life = person.life_count
-        for i in range(life): 
-            pygame.draw.rect(game_display,Colors.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 1 + j * 60, display_width * 0.02 - 2, display_height*0.06 - 2]) 
-        for i in range(12 - life): 
-            pygame.draw.rect(game_display, Colors.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 1 + j * 60, display_width * 0.02 - 2, display_height*0.06 - 2]) 
-    
-
     #points
 
     #Pause and Restart(Button)
@@ -172,21 +162,6 @@ def GameLoop():
     Init()
     NonMovingBackgroundDisplay()
 
-<<<<<<< HEAD
-=======
-    global general_stair_photo
-    general_stair_photo = pygame.image.load('Generalstairs_1.jpg')
-    general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
-    
-    global hurt_stair_photo
-    hurt_stair_photo = pygame.image.load('Stingstairs.png')
-    hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
-    
-    global cloud_stair_photo
-    cloud_stair_photo = pygame.image.load('Cloudstairs.png')
-    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 40))
-
->>>>>>> 90b890f... Add sting stairs and cloud stairs pictures
     #initial stair list
     global stair_list
     stair_list = []
@@ -201,6 +176,10 @@ def GameLoop():
         persons.append(Person.Person(340 + 75 - 20 + i * 30, stair_list[2].y - 40, i))
         persons[-1].photo = person_photo
 
+    Stair.stair_list = stair_list
+
+    Helper.persons = persons
+    Helper.UpdateLife()
     while not game_exit:
         try:
             BackgroundDisplay()
