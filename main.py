@@ -296,10 +296,13 @@ def GameStart():
 
     players = 1
     while intro:
-        for event in pygame.event.get():    
+        for event in pygame.event.get():  
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    StartGame()
 
         # display background and text
         ''' start_background = pygame.image.load('background.png') # 弄圖片
@@ -312,8 +315,7 @@ def GameStart():
         
         ''' pygame.draw.rect(game_display, (100,100,100), (255,255,main_width,main_height))
         pygame.draw.rect(game_display, (125,125,125), (250,250,main_width,main_height)) '''
-
-
+        
         StartButton()    
 
         if players == 1:
