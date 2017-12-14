@@ -28,24 +28,24 @@ stair_list = []
 def Init():
     # Initialize Background
     global background_photo
-    background_photo = pygame.image.load('BackgroundIce.png')
+    background_photo = pygame.image.load('BackgroundIce.png').convert_alpha()
     background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
 
     # Initialize Stairs
     global general_stair_photo
-    general_stair_photo = pygame.image.load('Generalstairs_2.jpg')
+    general_stair_photo = pygame.image.load('Generalstairs_2.jpg').convert_alpha()
     general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
     
     global hurt_stair_photo
-    hurt_stair_photo = pygame.image.load('Stingstairs.png')
+    hurt_stair_photo = pygame.image.load('Stingstairs.png').convert_alpha()
     hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
     
     global cloud_stair_photo
-    cloud_stair_photo = pygame.image.load('Cloudstairs.png')
+    cloud_stair_photo = pygame.image.load('Cloudstairs.png').convert_alpha()
     cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 40))
 
     global person_photo 
-    person_photo = pygame.transform.scale(pygame.image.load('person.png'), (Person.width, Person.height))
+    person_photo = pygame.transform.scale(pygame.image.load('person.png'), (Person.width, Person.height)).convert_alpha()
     Person.display_width = display_width
     Person.display_height = display_height
     Person.dead_count = Helper.players
@@ -181,6 +181,7 @@ def GameLoop():
     Helper.persons = persons
     Helper.UpdateLife()
     while not game_exit:
+        print(int(clock.get_fps()))
         try:
             BackgroundDisplay()
 
