@@ -164,10 +164,10 @@ def GraphicDisplay():
             stair_photo = general_stair_photo
         elif stair.type == "hurt":
             stair_photo = hurt_stair_photo
-        '''elif stair.type == "moving":   
-            stair_photo = moving_stair_photo'''
-        else:
+        elif stair.type == "cloud":
             stair_photo = cloud_stair_photo
+        '''elif stair.type == "moving":
+            stair_photo == moving_stair_photo'''
 
         game_display.blit(stair_photo, [stair.x, stair.y])
  

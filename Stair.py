@@ -10,10 +10,10 @@ class Stair:
             self.type = "general"
         elif 12 <= type_number <= 15:
             self.type = "hurt"
-        '''elif 16 <= type_number <= 20:
-            self.type = "Moving" ''' 
-        else:
+        elif 16 <= type_number <= 20:
             self.type = "cloud"
+        '''else: #還沒設出現比例
+            self.type = "moving" '''
 
         
         self.width = 150   #假設圖片寬度是150
@@ -38,9 +38,9 @@ class Stair:
             elif self.type == "hurt":
                 self.count += 1
                 person.Hurt(self.count)
-            '''elif self.type == "Moving":
+            elif self.type == "cloud":
+                self.count += 1
+                person.Cloud(self.count)
+            '''elif self.type = "moving":
                 self.count += 1
                 person.Moving(self.count)'''
-            elif self.type == "cloud":
-                    self.count += 1
-                person.Cloud(self.count)
