@@ -103,6 +103,7 @@ def StairMoving():
         stair_list.append(next_stair)
         collect() # 優化
 
+
 def GameLoop():
     """ Core Game Loop """
     game_exit = False
@@ -121,6 +122,7 @@ def GameLoop():
 
     global persons
     persons = []
+    Person.persons = persons
     global person_photo
     for i in range(Helper.players):
         persons.append(Person.Person(340 + 75 - 20 + i * 30, stair_list[2].y - 40, i))
@@ -131,38 +133,49 @@ def GameLoop():
     Helper.persons = persons
     Helper.UpdateLife()
 
+    # If there are two players, set player_collision to point to collision function
+    if Helper.players == 2:
+        player_collision = Helper.PlayerCollision
+    else:
+        player_collision = Helper.EmptyFunction
+
     while not game_exit:
-            BackgroundDisplay()
+        BackgroundDisplay()
 
-            # Save events
-            events = pygame.event.get()
+        # Save events
+        events = pygame.event.get()
 
-            # Update Stairs
-            for i in range(8):
-                stair_list[i].Update()
+        # Update Stairs
+        for i in range(8):
+            stair_list[i].Update()
 
-            # Update person
-            for person in persons:
-                try:
-                    stair_list[(person.y - 33)// 75].HitStair(person)
-                    stair_list[(person.y - 33)// 75 + 1].HitStair(person)
-                except IndexError:
-                    pass
-                person.Update(events)
+        # Update person
+        for person in persons:
+            # Take mod to narrow down to only two possible stairs that can be collided with
+            try:
+                stair_list[(person.y - 33) // 75].HitStair(person)
+                stair_list[(person.y - 33) // 75 + 1].HitStair(person)
+            # Possible index error when person below game level
+            except IndexError:  
+                pass
+            person.Update(events)
 
-            # Redraw Background Display -> Foreground Display
-            GraphicDisplay()
+        # Points to either collision function or empty function depending on player count
+        player_collision()               
 
-            for event in events:
-                if event.type == pygame.QUIT:
-                    Helper.QuitGame()
+        # Redraw Background Display -> Foreground Display
+        GraphicDisplay()
 
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        Helper.Paused()
+        for event in events:
+            if event.type == pygame.QUIT:
+                Helper.QuitGame()
 
-            pygame.display.update()
-            clock.tick(60)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    Helper.Paused()
+
+        pygame.display.update()
+        clock.tick(60)
 
         
 crashed = False

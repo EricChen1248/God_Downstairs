@@ -220,8 +220,9 @@ def Button(msg,x,y,w,h,ic,ac,action = None):
     game_display.blit(text_surf, text_rect) 
 
 def NonMovingBackgroundDisplay():
-    """Not-moving objects display"""
-    # background
+    """ Non-moving objects display """
+    
+    # Fill background white
     game_display.fill(Colors.white)
 
     # title
@@ -247,14 +248,12 @@ def NonMovingBackgroundDisplay():
     game_display.blit(user_name, user_rect)
 
     # Current score
-    game_font = pygame.font.Font('JT1-09U.TTF', 48)
     title_name, title_rect = TextObjects("現在分數：", game_font)
     title_rect.center = ((display_width * 0.7), (display_height * 0.35))
     game_display.blit(title_name, title_rect)
 
     # Life
     for j in range(players):
-        game_font = pygame.font.Font('JT1-09U.TTF', 48)
         title_name, title_rect = TextObjects("命：", game_font)
         title_rect.center = ((display_width * 0.65), (display_height * 0.45) + j * 60)
         game_display.blit(title_name, title_rect)
@@ -264,5 +263,37 @@ def NonMovingBackgroundDisplay():
 
     game_display.blit(background_photo, [0, 0])
 
+def PlayerCollision():
+    """ Handles Player Collision when there's two players """
+    a = persons[0]
+    b = persons[1]
+    width = Person.width
+    height = Person.height
+    
+    x_distance = abs(a.x - b.x)
+    y_distance = abs(a.y - b.y)
+
+    # Players need to be intersecting of both x and y axis
+    if x_distance < width and y_distance < height:
+        # If y distance is larger then it means player fell on top of each other
+        if y_distance > x_distance:
+            # Set players to stand on each other
+            if b.y < a.y:
+                b.y = a.y - height
+            else:
+                a.y = b.y - height
+        # Otherwise players walked into each other
+        else:
+            # Only need to shift players by the amount of collision
+            x_distance -= width
+            # Determines left right order of players
+            if b.x < a.x:
+                a.x -= x_distance // 2
+                b.x += x_distance  - x_distance // 2
+            else:
+                a.x += x_distance // 2
+                b.x -= x_distance - x_distance // 2
+
 def EmptyFunction(var1 = None, var2 = None, var3 = None, var4 = None, var5 = None):
+    """ Empty Function for passing in a function that doesn't do anything when required """
     pass

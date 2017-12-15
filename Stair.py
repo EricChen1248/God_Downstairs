@@ -30,7 +30,5 @@ class Stair:
         self.y -= 2             # 所有樓梯不斷上升
     
     def HitStair(self, person):
-        if self.fall_through:
-            return
         if self.y + self.height > (person.y + Person.height - 2) > self.y and self.x <= (person.x + Person.width) <= (self.x + self.width + Person.width):         
             person.HitStair(self)
