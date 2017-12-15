@@ -12,14 +12,28 @@ dead_count = 2
 persons = []
 
 default_fall_time = 4
+
+persons = []
+players = 1
+
+def Init(width, height, person_list):
+    global display_width 
+    display_width = width
+    global display_height
+    display_height = height
+    global persons
+    persons = person_list
+    global dead_count
+    dead_count = players
+
 class Person:
 
-    def Hurt(self, stair):
+    def SpikeStairs(self, stair):
         """ Spike stair reaction """
         if self.stair is not stair:
             self.UpdateLife(-6)
 
-    def Cloud(self, stair):
+    def CloudStairs(self, stair):
         """ Cloud stair reaction """
         # If cloud was not the same cloud as last time, reset count
         if self.stair is not stair:
@@ -67,7 +81,7 @@ class Person:
         # Used to keep track of cloud standing time
         self.cloud_count = 5
         # Map stair_reaction dictionary
-        self.stair_reaction = {'general': Helper.EmptyFunction, 'hurt':self.Hurt, 'cloud':self.Cloud }
+        self.stair_reaction = {'Normal': Helper.EmptyFunction, 'Spike':self.SpikeStairs, 'Cloud':self.CloudStairs }
         # Fall through timer count
         self.fall_through = 0
         # Initialize direction with default 0 (Non moving)

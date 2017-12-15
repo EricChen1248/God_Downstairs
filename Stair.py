@@ -6,29 +6,29 @@ width = 150
 height = 20
 
 stair_list = []
+
 class Stair:
-    
     def __init__(self, main_width, count):
-        """ Attributes of stair """        
+        """ Initialize Stairs """  
+        # Generate random type      
         type_number = random.randint(0, 10)
         if 0 <= type_number <= 4:
-            self.type = "general"
+            self.type = "Normal"
         elif 5 <= type_number <= 7:
-            self.type = "hurt"
+            self.type = "Spike"
         else:
-            self.type = "cloud"
+            self.type = "Cloud"
 
-        
-        self.width = width      # 假設圖片寬度是150
-        self.height = height    # 假設圖片長度是20
-        self.x = random.randint(31, main_width - self.width - 31)  
+        self.x = random.randint(31, main_width - width - 31)  
         self.y = 640 - 75 * (8 - count)
         self.fall_through = False
             
     def Update(self):
-        """ be touched or not and its reaction """
-        self.y -= 2             # 所有樓梯不斷上升
+        """ Stair Update Function (Constantly moving up) """
+        self.y -= 2
     
     def HitStair(self, person):
-        if self.y + self.height > (person.y + Person.height - 2) > self.y and self.x <= (person.x + Person.width) <= (self.x + self.width + Person.width):         
+        """ Checks for collision with person """
+        if self.y + height > (person.y + Person.height - 2) > self.y and\
+           self.x <= (person.x + Person.width) <= (self.x + width + Person.width):         
             person.HitStair(self)

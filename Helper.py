@@ -2,16 +2,16 @@ import pygame
 import Colors
 import Exceptions
 import sys
+import Person
 
 game_display = None
 display_width = None
 display_height = None
 background_photo = None
 clock = None
+stair_photos = {}
 
 skip_start = False
-players = 1
-persons = []
 
 def Init(display, width, height, oClock):
     global game_display
@@ -28,7 +28,6 @@ def Init(display, width, height, oClock):
 
 def GameStart():
     """Define Game Intro screen"""
-    intro = True
     
     button_width_factor = 0.18
     button_height_factor = 0.1
@@ -44,8 +43,6 @@ def GameStart():
         intro = False
         
     def StartButton():
-        button_width_factor = 0.18
-        button_height_factor = 0.1
         Button("START", display_width / 2 * (1 - button_width_factor), display_height * 0.7 * (1 - button_height_factor), 
                         display_width * button_width_factor, display_height * button_height_factor, 
                         Colors.green, Colors.bright_green, StartGame)
@@ -61,15 +58,14 @@ def GameStart():
                         Colors.red, Colors.bright_red, TogglePlayer1)
    
     def TogglePlayer2():
-        global players
-        players = 2
+        Person.players = 2
         clock.tick(20)
 
     def TogglePlayer1():
-        global players
-        players = 1
+        Person.players = 1
         clock.tick(20)
 
+    intro = True
     while intro:
         for event in pygame.event.get():    
             if event.type == pygame.QUIT:
@@ -81,7 +77,7 @@ def GameStart():
 
         StartButton()    
 
-        if players == 1:
+        if Person.players == 1:
             PlayerOneButton()
         else:
             PlayerTwoButton()
@@ -90,11 +86,12 @@ def GameStart():
         clock.tick(15)
 
 def GameEnd():
-    """Define Game End Screen"""
+    """ Define Game End Screen """
 
+    button_width_factor = 0.11
+    button_height_factor = 0.09
+    
     def RestartButton():
-        button_width_factor = 0.11
-        button_height_factor = 0.09
         Button("RESTART", display_width / 2 + 180, display_height / 1.15, 
                         display_width * button_width_factor, display_height * button_height_factor, 
                         Colors.green, Colors.bright_green, Restart)
@@ -103,8 +100,6 @@ def GameEnd():
         global skip_start
         skip_start = True
         raise Exceptions.GameOverException
-
-    fail = True
 
     game_display.fill(Colors.white)
     game_font = pygame.font.Font('JT1-09U.TTF', 115)
@@ -128,6 +123,7 @@ def GameEnd():
     bottomtext_rect.center = ((display_width / 2 - 120), (display_height / 1.1))
     game_display.blit(bottomtext_text, bottomtext_rect)
 
+    fail = True
     while fail:
 
         # Quit
@@ -150,21 +146,16 @@ def QuitGame():
     sys.exit()
 
 def Paused():
-    
+    """ Captures thread in loop until unpaused """
     def Unpause():
         nonlocal pause
         pause = False
 
-    # Remove original button
-    pygame.draw.rect(game_display, Colors.white,(display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1))
-    pygame.draw.rect(game_display, Colors.white,(display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1))
-
-    pause = True
-    #pygame.draw.rect(game_display  Colors.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
     large_text = pygame.font.Font("freesansbold.ttf",115)
     text_surf, text_rect = TextObjects("Paused", large_text, Colors.red)
     text_rect.center = ((display_width * 0.6 /2),(display_height * 0.4))
     
+    pause = True
     while pause:
         game_display.blit(text_surf, text_rect)
 
@@ -183,12 +174,12 @@ def Paused():
         pygame.display.update()
         clock.tick(15)
 
-    
     NonMovingBackgroundDisplay()
+    UpdateLife()
 
 def UpdateLife():
     count = 0
-    for person in persons:
+    for person in Person.persons:
         life = person.life_count
         for i in range(life): 
             pygame.draw.rect(game_display,Colors.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 1 + count * 60, display_width * 0.02 - 2, display_height*0.06 - 2]) 
@@ -202,7 +193,7 @@ def TextObjects(text, font, color = Colors.black):
     return text_surface, text_surface.get_rect()
 
 def Button(msg,x,y,w,h,ic,ac,action = None):
-    """ Create button"""
+    """ Creates button with click actions """
     mouse = pygame.mouse.get_pos()
     click = pygame.mouse.get_pressed()
     
@@ -216,7 +207,7 @@ def Button(msg,x,y,w,h,ic,ac,action = None):
 
     small_font = pygame.font.Font("freesansbold.ttf",32)
     text_surf, text_rect = TextObjects(msg, small_font)
-    text_rect.center = ( (x+(w/2)), (y+(h/2)) )
+    text_rect.center = ((x + (w / 2)), (y + (h / 2)))
     game_display.blit(text_surf, text_rect) 
 
 def NonMovingBackgroundDisplay():
@@ -237,11 +228,12 @@ def NonMovingBackgroundDisplay():
     title_rect.center = ((display_width * 0.68), (display_height * 0.15))
     game_display.blit(title_name, title_rect)
 
-    # User name and photo
+    # User photo
     user_image = pygame.image.load('lckung.png')
     user_image_size = pygame.transform.scale(user_image, (int(display_width * 0.05), int(display_height * 0.1)))
     game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.2])
 
+    # User name
     game_font = pygame.font.Font('JT1-09U.TTF', 48)
     user_name, user_rect = TextObjects("小傑", game_font)
     user_rect.center = ((display_width * 0.72), (display_height * 0.25))
@@ -252,8 +244,8 @@ def NonMovingBackgroundDisplay():
     title_rect.center = ((display_width * 0.7), (display_height * 0.35))
     game_display.blit(title_name, title_rect)
 
-    # Life
-    for j in range(players):
+    # Life background
+    for j in range(Person.players):
         title_name, title_rect = TextObjects("命：", game_font)
         title_rect.center = ((display_width * 0.65), (display_height * 0.45) + j * 60)
         game_display.blit(title_name, title_rect)
@@ -265,8 +257,8 @@ def NonMovingBackgroundDisplay():
 
 def PlayerCollision():
     """ Handles Player Collision when there's two players """
-    a = persons[0]
-    b = persons[1]
+    a = Person.persons[0]
+    b = Person.persons[1]
     width = Person.width
     height = Person.height
     
