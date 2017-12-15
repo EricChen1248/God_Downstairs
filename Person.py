@@ -108,6 +108,7 @@ class Person:
         global dead_count
         self.life_count = 0
         dead_count -= 1
+        Helper.UpdateLife()
         if dead_count <= 0:
             Helper.GameEnd()
 
