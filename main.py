@@ -1,7 +1,5 @@
-import gc
-import os
-import random
-import time
+from gc import collect
+from os import environ
 
 import pygame
 
@@ -12,7 +10,7 @@ import Person
 import Stair
 
 # Starting window position
-os.environ['SDL_VIDEO_WINDOW_POS'] = '20,34'
+environ['SDL_VIDEO_WINDOW_POS'] = '20,34'
 # initiation and display
 pygame.init() 
 
@@ -31,6 +29,7 @@ def Init():
     global background_photo
     background_photo = pygame.image.load('BackgroundIce.png').convert_alpha()
     background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
+    Helper.background_photo = background_photo
 
     # Initialize Stairs
     global general_stair_photo
@@ -53,53 +52,6 @@ def Init():
     global persons
     persons = []
     
-def NonMovingBackgroundDisplay():
-    """Not-moving objects display"""
-    # background
-    game_display.fill(Colors.white)
-
-    # title
-    game_font = pygame.font.Font('JT1-09U.TTF', 60)
-    title_name, title_rect = Helper.TextObjects("小傑下樓梯~", game_font)
-    title_rect.center = ((display_width * 0.8), (display_height * 0.05))
-    game_display.blit(title_name, title_rect)
-
-    # history highest score
-    game_font = pygame.font.Font('JT1-09U.TTF', 36)
-    title_name, title_rect = Helper.TextObjects("歷史高分：", game_font)
-    title_rect.center = ((display_width * 0.68), (display_height * 0.15))
-    game_display.blit(title_name, title_rect)
-
-    # User name and photo
-    user_image = pygame.image.load('lckung.png')
-    user_image_size = pygame.transform.scale(user_image, (int(display_width * 0.05), int(display_height * 0.1)))
-    game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.2])
-
-    game_font = pygame.font.Font('JT1-09U.TTF', 48)
-    user_name, user_rect = Helper.TextObjects("小傑", game_font)
-    user_rect.center = ((display_width * 0.72), (display_height * 0.25))
-    game_display.blit(user_name, user_rect)
-
-    # Current score
-    game_font = pygame.font.Font('JT1-09U.TTF', 48)
-    title_name, title_rect = Helper.TextObjects("現在分數：", game_font)
-    title_rect.center = ((display_width * 0.7), (display_height * 0.35))
-    game_display.blit(title_name, title_rect)
-
-    # Life
-    for j in range(Helper.players):
-        game_font = pygame.font.Font('JT1-09U.TTF', 48)
-        title_name, title_rect = Helper.TextObjects("命：", game_font)
-        title_rect.center = ((display_width * 0.65), (display_height * 0.45) + j * 60)
-        game_display.blit(title_name, title_rect)
-
-        for i in range(12):
-            pygame.draw.rect(game_display, Colors.black,[display_width*(0.7+0.0195*i), display_height*0.42 + j * 60, display_width * 0.02 , display_height*0.06],1) 
-
-    
-    global background_photo
-    game_display.blit(background_photo, [0, 0])
-
 def BackgroundDisplay():
     global background_photo
     for person in persons:
@@ -146,17 +98,17 @@ def StairMoving():
     """ Complicated moving about stairs """
     #Just checking the first one
     if stair_list[0].y < 35:
-        stair_list.pop(0)
+        del stair_list[0]
         next_stair = Stair.Stair(display_width * 0.6, 8)
         stair_list.append(next_stair)
-        gc.collect() # 優化
+        collect() # 優化
 
 def GameLoop():
     """ Core Game Loop """
     game_exit = False
 
     Init()
-    NonMovingBackgroundDisplay()
+    Helper.NonMovingBackgroundDisplay()
 
     #initial stair list
     global stair_list
@@ -194,7 +146,7 @@ def GameLoop():
                 try:
                     stair_list[(person.y - 33)// 75].HitStair(person)
                     stair_list[(person.y - 33)// 75 + 1].HitStair(person)
-                except:
+                except IndexError:
                     pass
                 person.Update(events)
 
@@ -217,6 +169,7 @@ crashed = False
 clock = pygame.time.Clock() 
 game_display = pygame.display.set_mode((display_width,display_height),pygame.DOUBLEBUF)
 Helper.Init(game_display, display_width, display_height, clock)
+
 while not crashed:
 
     persons = []

@@ -6,6 +6,7 @@ import sys
 game_display = None
 display_width = None
 display_height = None
+background_photo = None
 clock = None
 
 skip_start = False
@@ -31,14 +32,6 @@ def GameStart():
     
     button_width_factor = 0.18
     button_height_factor = 0.1
-    
-
-    # display background and text
-    ''' start_background = pygame.image.load('background.png') # 弄圖片
-    game_display.fill(start_background) '''
-    
-    ''' pygame.draw.rect(game_display, (100,100,100), (255,255,main_width,main_height))
-    pygame.draw.rect(game_display, (125,125,125), (250,250,main_width,main_height)) '''
 
     game_display.fill(Colors.white)
     game_font = pygame.font.Font('JT1-09U.TTF', 115)
@@ -82,6 +75,9 @@ def GameStart():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    StartGame()
 
         StartButton()    
 
@@ -106,7 +102,6 @@ def GameEnd():
     def Restart():
         global skip_start
         skip_start = True
-        clock.tick(20)
         raise Exceptions.GameOverException
 
     fail = True
@@ -188,6 +183,9 @@ def Paused():
         pygame.display.update()
         clock.tick(15)
 
+    
+    NonMovingBackgroundDisplay()
+
 def UpdateLife():
     count = 0
     for person in persons:
@@ -220,6 +218,51 @@ def Button(msg,x,y,w,h,ic,ac,action = None):
     text_surf, text_rect = TextObjects(msg, small_font)
     text_rect.center = ( (x+(w/2)), (y+(h/2)) )
     game_display.blit(text_surf, text_rect) 
+
+def NonMovingBackgroundDisplay():
+    """Not-moving objects display"""
+    # background
+    game_display.fill(Colors.white)
+
+    # title
+    game_font = pygame.font.Font('JT1-09U.TTF', 60)
+    title_name, title_rect = TextObjects("小傑下樓梯~", game_font)
+    title_rect.center = ((display_width * 0.8), (display_height * 0.05))
+    game_display.blit(title_name, title_rect)
+
+    # history highest score
+    game_font = pygame.font.Font('JT1-09U.TTF', 36)
+    title_name, title_rect = TextObjects("歷史高分：", game_font)
+    title_rect.center = ((display_width * 0.68), (display_height * 0.15))
+    game_display.blit(title_name, title_rect)
+
+    # User name and photo
+    user_image = pygame.image.load('lckung.png')
+    user_image_size = pygame.transform.scale(user_image, (int(display_width * 0.05), int(display_height * 0.1)))
+    game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.2])
+
+    game_font = pygame.font.Font('JT1-09U.TTF', 48)
+    user_name, user_rect = TextObjects("小傑", game_font)
+    user_rect.center = ((display_width * 0.72), (display_height * 0.25))
+    game_display.blit(user_name, user_rect)
+
+    # Current score
+    game_font = pygame.font.Font('JT1-09U.TTF', 48)
+    title_name, title_rect = TextObjects("現在分數：", game_font)
+    title_rect.center = ((display_width * 0.7), (display_height * 0.35))
+    game_display.blit(title_name, title_rect)
+
+    # Life
+    for j in range(players):
+        game_font = pygame.font.Font('JT1-09U.TTF', 48)
+        title_name, title_rect = TextObjects("命：", game_font)
+        title_rect.center = ((display_width * 0.65), (display_height * 0.45) + j * 60)
+        game_display.blit(title_name, title_rect)
+
+        for i in range(12):
+            pygame.draw.rect(game_display, Colors.black,[display_width*(0.7+0.0195*i), display_height*0.42 + j * 60, display_width * 0.02 , display_height*0.06],1) 
+
+    game_display.blit(background_photo, [0, 0])
 
 def EmptyFunction(var1 = None, var2 = None, var3 = None, var4 = None, var5 = None):
     pass
