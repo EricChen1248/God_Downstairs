@@ -166,8 +166,8 @@ def GraphicDisplay():
             stair_photo = hurt_stair_photo
         elif stair.type == "cloud":
             stair_photo = cloud_stair_photo
-        '''elif stair.type == "moving":
-            stair_photo == moving_stair_photo'''
+        elif stair.type == "moving":
+            stair_photo = moving_stair_photo
 
         game_display.blit(stair_photo, [stair.x, stair.y])
  
@@ -217,9 +217,9 @@ def GameLoop():
     cloud_stair_photo = pygame.image.load('Cloudstairs.png')
     cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 40))
 
-    '''global moving_stair_photo #放移動樓梯的圖片
+    global moving_stair_photo #放移動樓梯的圖片
     moving_stair_photo = pygame.image.load('Cloudstairs.png')
-    moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 20))'''
+    moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 20))
 
     #initial stair list
     global stair_list
@@ -243,7 +243,7 @@ def GameLoop():
         person.Update(events)
 
         for i in range(8):
-            stair_list[i].Update(person)
+            stair_list[i].Update(person, display_width * 0.6)
 
         BackgroundDisplay()
         GraphicDisplay()
