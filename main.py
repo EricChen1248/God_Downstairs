@@ -219,7 +219,7 @@ def GameLoop():
 
     global moving_stair_photo #放移動樓梯的圖片
     moving_stair_photo = pygame.image.load('Cloudstairs.png')
-    moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 20))
+    moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 40))
 
     #initial stair list
     global stair_list

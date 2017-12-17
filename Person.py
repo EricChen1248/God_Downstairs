@@ -26,12 +26,17 @@ class Person:
             if event.type == pygame.KEYDOWN:            # 若按鍵被按下
                 if event.key == pygame.K_LEFT:          # 按左鍵
                     self.x_change += -5
+                    person_photo = pygame.image.load('小傑側面_左跨步.png')
+                    self.photo = pygame.transform.scale(person_photo, (self.width, self.height))
                 if event.key == pygame. K_RIGHT:        # 按右鍵
                     self.x_change += 5
+                    person_photo = pygame.image.load('小傑側面_右跨步.png')
+                    self.photo = pygame.transform.scale(person_photo, (self.width, self.height))
             if event.type == pygame.KEYUP:              # 若按鍵放開就不動
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     self.x_change = 0
-        
+                    person_photo = pygame.image.load('小傑正面.png')
+                    self.photo = pygame.transform.scale(person_photo, (self.width, self.height))        
         # Handles horizontal movements
         self.x += self.x_change
         # Check horizontal bounds
