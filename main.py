@@ -230,8 +230,8 @@ def GameLoop():
     stair_list[2].x = 340
 
     global person
-    person_photo = pygame.image.load('person.png')
-    person = Person.Person(40, 40, 340+75-20, stair_list[2].y - 40, person_photo, display_width, display_height)
+    person_photo = pygame.image.load('小傑正面.png')
+    person = Person.Person(40, 60, 340+75-20, stair_list[2].y - 60, person_photo, display_width, display_height)
     person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
 
 
@@ -311,8 +311,7 @@ def GameStart():
                     StartGame()
 
         # display background and text
-        ''' start_background = pygame.image.load('background.png') # 弄圖片
-        game_display.fill(start_background) '''
+
         game_display.fill(white)
         game_font = pygame.font.Font('JT1-09U.TTF', 115)
         start_name, start_rect = TextObjects("小傑下樓梯~", game_font)
