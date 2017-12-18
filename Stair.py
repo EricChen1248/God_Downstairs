@@ -23,6 +23,7 @@ class Stair:
         self.count = 0
         if self.type == "moving":
             self.original_x = self.x
+
             self.hit_count = 0 #向右移動
 
     
@@ -43,7 +44,7 @@ class Stair:
                     self.x -= 0.8
                 elif self.x - 0.8 <= self.original_x:
                     self.hit_count = 0
-        """
+        
         def GelGroup(self):
             if self.hit_count == 0:
                 if self.x + 0.8 < self.original_x + 90:
@@ -60,8 +61,8 @@ class Stair:
             HitRightGroup(self)
         else:
             GelGroup(self)
-        """
-        HitRightGroup(self)
+        
+        
 
     def Update(self, person, main_width):
         """be touched or not and its reaction"""
