@@ -203,12 +203,12 @@ def GameLoop():
     for i in range(8):
         new_stair = Stair.Stair(display_width * 0.6, i)
         stair_list.append(new_stair)
-    stair_list[2].x = 300
-    stair_list[2].type = "general"
+    stair_list[3].x = 300
+    stair_list[3].type = "general"
 
     global person
     person_photo = pygame.image.load('小傑正面.png')
-    person = Person.Person(40, 60, 300+75-20, stair_list[2].y - 60, person_photo, display_width, display_height)
+    person = Person.Person(40, 60, 300+75-20, stair_list[3].y - 60, person_photo, display_width, display_height)
     person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
 
     global events

@@ -31,16 +31,19 @@ class Stair:
         '''move right and left'''
         def HitRightGroup(self):
             if self.hit_count == 0:
+                #還沒撞到右邊邊線
                 if self.x + self.width + 0.8 < main_width - 22:
                     self.x += 0.8
                 elif self.x + self.width + 0.8 >= main_width -22:
                     self.hit_count = 1
+                
             elif self.hit_count == 1:
-                if self.x - 0.8 > self.original_x - 90: #右邊界線是初始位向左90
+                #還沒撞到左邊邊線
+                if self.x - 0.8 > self.original_x - 90: #左邊界線是初始位向左90
                     self.x -= 0.8
                 elif self.x - 0.8 <= self.original_x:
                     self.hit_count = 0
-
+        """
         def GelGroup(self):
             if self.hit_count == 0:
                 if self.x + 0.8 < self.original_x + 90:
@@ -57,6 +60,8 @@ class Stair:
             HitRightGroup(self)
         else:
             GelGroup(self)
+        """
+        HitRightGroup(self)
 
     def Update(self, person, main_width):
         """be touched or not and its reaction"""
@@ -77,5 +82,5 @@ class Stair:
                 person.Cloud(self.count)
             elif self.type == "moving":
                 self.count += 1
-                person.General(self.count)
                 #person.Moving(self.count)
+                person.General(self.count)
