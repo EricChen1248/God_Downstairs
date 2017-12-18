@@ -13,7 +13,6 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = '20,34'
 
 # initiation and display
 pygame.init() 
-
 display_width = 1200
 display_height = 640
 game_display = pygame.display.set_mode((display_width,display_height))
@@ -78,8 +77,7 @@ def Init():
 
 def Paused():
     global pause
-    global events
-    
+
     # Remove original button
     pygame.draw.rect(game_display, Tool.white,(display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1))
     pygame.draw.rect(game_display, Tool.white,(display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1))
@@ -93,15 +91,15 @@ def Paused():
     while pause:
         game_display.blit(text_surf, text_rect)
 
-        Tool.Button("Continue",display_width * 0.05,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2, Tool.green,Tool.bright_green,Unpause)
-        Tool.Button("Quit",display_width * 0.38,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2, Tool.red,Tool.bright_red,QuitGame)
+        Tool.Button(game_display, "Continue",display_width * 0.05,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2, Tool.green,Tool.bright_green,Unpause)
+        Tool.Button(game_display, "Quit",display_width * 0.38,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2, Tool.red,Tool.bright_red,QuitGame)
 
-        for event in events:
-            """
+        for event in pygame.event.get():
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     Restart()
-            """
+
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()
@@ -159,8 +157,8 @@ def GraphicDisplay():
     #points
 
     #Pause and Restart(Button)
-    Tool.Button("Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, Tool.green, Tool.bright_green,action = Paused)
-    Tool.Button("Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, Tool.red, Tool.bright_red,action = Restart)
+    Tool.Button(game_display, "Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, Tool.green, Tool.bright_green,action = Paused)
+    Tool.Button(game_display, "Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, Tool.red, Tool.bright_red,action = Restart)
 
 def StairMoving():
     """Complicated moving about stairs"""
@@ -253,17 +251,17 @@ def GameStart():
     def StartButton():
         button_width_factor = 0.18
         button_height_factor = 0.1
-        Tool.Button("START", display_width / 2 * (1 - button_width_factor), display_height * 0.7 * (1 - button_height_factor), 
+        Tool.Button(game_display, "START", display_width / 2 * (1 - button_width_factor), display_height * 0.7 * (1 - button_height_factor), 
                         display_width * button_width_factor, display_height * button_height_factor, 
                         Tool.green, Tool.bright_green, StartGame)
         
     def PlayerOneButton():
-        Tool.Button("1 Player", display_width / 2 * (1 - button_width_factor), display_height * 0.5 * (1 - button_height_factor), 
+        Tool.Button(game_display, "1 Player", display_width / 2 * (1 - button_width_factor), display_height * 0.5 * (1 - button_height_factor), 
                         display_width * button_width_factor, display_height * button_height_factor, 
                         Tool.red, Tool.bright_red, TogglePlayer2)
 
     def PlayerTwoButton():
-        Tool.Button("2 Player", display_width / 2 * (1 - button_width_factor), display_height * 0.5 * (1 - button_height_factor), 
+        Tool.Button(game_display, "2 Player", display_width / 2 * (1 - button_width_factor), display_height * 0.5 * (1 - button_height_factor), 
                         display_width * button_width_factor, display_height * button_height_factor, 
                         Tool.red, Tool.bright_red, TogglePlayer1)
    
@@ -315,7 +313,7 @@ def GameEnd():
     def RestartButton():
         button_width_factor = 0.11
         button_height_factor = 0.09
-        Tool.Button("RESTART", display_width / 2 + 180, display_height / 1.15, 
+        Tool.Button(game_display, "RESTART", display_width / 2 + 180, display_height / 1.15, 
                         display_width * button_width_factor, display_height * button_height_factor, 
                         green, Tool.bright_green, GameLoop)
     
