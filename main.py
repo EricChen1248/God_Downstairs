@@ -95,6 +95,7 @@ def Paused():
         Tool.Button(game_display, "Quit",display_width * 0.38,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2, Tool.red,Tool.bright_red,QuitGame)
 
         for event in pygame.event.get():
+            print(event)
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
@@ -202,11 +203,12 @@ def GameLoop():
     for i in range(8):
         new_stair = Stair.Stair(display_width * 0.6, i)
         stair_list.append(new_stair)
-    stair_list[2].x = 340
+    stair_list[2].x = 300
+    stair_list[2].type = "general"
 
     global person
     person_photo = pygame.image.load('小傑正面.png')
-    person = Person.Person(40, 60, 340+75-20, stair_list[2].y - 60, person_photo, display_width, display_height)
+    person = Person.Person(40, 60, 300+75-20, stair_list[2].y - 60, person_photo, display_width, display_height)
     person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
 
     global events
@@ -309,14 +311,12 @@ def GameStart():
 def GameEnd():
     """Define Game End Screen"""
 
-
     def RestartButton():
         button_width_factor = 0.11
         button_height_factor = 0.09
         Tool.Button(game_display, "RESTART", display_width / 2 + 180, display_height / 1.15, 
                         display_width * button_width_factor, display_height * button_height_factor, 
                         green, Tool.bright_green, GameLoop)
-    
     fail = True
 
     while fail:
