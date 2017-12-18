@@ -63,7 +63,7 @@ def Init():
 
     # Initialize Persons
     global person_photo 
-    person_photo = pygame.transform.scale(pygame.image.load('person.png'), (Person.width, Person.height)).convert_alpha()
+    person_photo = pygame.transform.scale(pygame.image.load('小傑正面.png'), (Person.width, Person.height)).convert_alpha()
     
     global persons
     persons = []
@@ -125,39 +125,11 @@ def GameLoop():
     Init()
     Helper.NonMovingBackgroundDisplay()
     
-<<<<<<< HEAD
     # If there are two players, set player_collision to point to collision function
     if Person.players == 2:
         player_collision = Helper.PlayerCollision
     else:
         player_collision = Helper.EmptyFunction
-=======
-    global hurt_stair_photo
-    hurt_stair_photo = pygame.image.load('Stingstairs.png')
-    hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
-    
-    global cloud_stair_photo
-    cloud_stair_photo = pygame.image.load('Cloudstairs.png')
-    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 40))
-
-    global moving_stair_photo #放移動樓梯的圖片
-    moving_stair_photo = pygame.image.load('Cloudstairs.png')
-    moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 20))
-
-    #initial stair list
-    global stair_list
-    stair_list = []
-    for i in range(8):
-        new_stair = Stair.Stair(display_width * 0.6, i)
-        stair_list.append(new_stair)
-    stair_list[2].x = 340
-
-    global person
-    person_photo = pygame.image.load('小傑正面.png')
-    person = Person.Person(40, 60, 340+75-20, stair_list[2].y - 60, person_photo, display_width, display_height)
-    person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
-
->>>>>>> e1401f8... Add character animation pircture, adjust initial position
 
     game_exit = False
     while not game_exit:
@@ -198,7 +170,6 @@ def GameLoop():
         pygame.display.update()
         clock.tick(60)
 
-<<<<<<< HEAD
 crashed = False
 while not crashed:
     if not Helper.skip_start:
@@ -206,87 +177,6 @@ while not crashed:
     else:
         # Reset skip_start to False
         Helper.skip_start = False
-=======
-def GameStart():
-    """Define Game Intro screen"""
-    intro = True
-    
-    button_width_factor = 0.18
-    button_height_factor = 0.1
-       
-    def StartGame():
-        nonlocal intro
-        intro = False
-        
-    def StartButton():
-        button_width_factor = 0.18
-        button_height_factor = 0.1
-        Button("START", display_width / 2 * (1 - button_width_factor), display_height * 0.7 * (1 - button_height_factor), 
-                        display_width * button_width_factor, display_height * button_height_factor, 
-                        green, bright_green, StartGame)
-        
-    def PlayerOneButton():
-        Button("1 Player", display_width / 2 * (1 - button_width_factor), display_height * 0.5 * (1 - button_height_factor), 
-                        display_width * button_width_factor, display_height * button_height_factor, 
-                        red, bright_red, TogglePlayer2)
-
-    def PlayerTwoButton():
-        Button("2 Player", display_width / 2 * (1 - button_width_factor), display_height * 0.5 * (1 - button_height_factor), 
-                        display_width * button_width_factor, display_height * button_height_factor, 
-                        red, bright_red, TogglePlayer1)
-   
-    def TogglePlayer2():
-        nonlocal players
-        players = 2
-        clock.tick(20)
-
-    def TogglePlayer1():
-        nonlocal players
-        players = 1
-        clock.tick(20)
-
-    players = 1
-    while intro:
-        for event in pygame.event.get():  
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    StartGame()
-
-        # display background and text
-
-        game_display.fill(white)
-        game_font = pygame.font.Font('JT1-09U.TTF', 115)
-        start_name, start_rect = TextObjects("小傑下樓梯~", game_font)
-        start_rect.center = ((display_width / 2), (display_height / 4))
-        game_display.blit(start_name, start_rect)
-        
-        ''' pygame.draw.rect(game_display, (100,100,100), (255,255,main_width,main_height))
-        pygame.draw.rect(game_display, (125,125,125), (250,250,main_width,main_height)) '''
-        
-        StartButton()    
-
-        if players == 1:
-            PlayerOneButton()
-        else:
-            PlayerTwoButton()
-
-        pygame.display.update()
-        clock.tick(15)
-
-def GameEnd():
-    """Define Game End Screen"""
-
-
-    def RestartButton():
-        button_width_factor = 0.11
-        button_height_factor = 0.09
-        Button("RESTART", display_width / 2 + 180, display_height / 1.15, 
-                        display_width * button_width_factor, display_height * button_height_factor, 
-                        green, bright_green, GameLoop)
->>>>>>> e1401f8... Add character animation pircture, adjust initial position
     
     try:
         GameLoop()
