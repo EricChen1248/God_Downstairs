@@ -78,6 +78,24 @@ class Person:
 
         if count <= 5:
             self.y += -7
+    def Moving(self, count, hit_count):
+        if hit_count == 0:
+            #還沒撞到右邊邊線
+            if self.x + self.width + 0.8 < self.display_width * 0.6 - 22:
+                self.x += 0.8
+            elif self.x + self.width + 0.8 >= self.display_width * 0.6 -22:
+                hit_count = 1
+                
+        elif hit_count == 1:
+            #還沒撞到左邊邊線
+            if self.x - 0.8 > self.original_x - 90: #左邊界線是初始位向左90
+                self.x -= 0.8
+            elif self.x - 0.8 <= self.original_x:
+                hit_count = 0
+        self.y += -7
+        if count == 1:
+            if self.life_count < 12:                        # 若沒滿血就加一
+                self.life_count += 1
 
     
 
