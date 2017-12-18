@@ -99,7 +99,7 @@ def Paused():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    Restart()
+                    Unpause()
 
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -194,8 +194,8 @@ def GameLoop():
     cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 40))
 
     global moving_stair_photo #放移動樓梯的圖片
-    moving_stair_photo = pygame.image.load('Cloudstairs.png')
-    moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 40))
+    moving_stair_photo = pygame.image.load('Generalstairs_2.jpg')
+    moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 20))
 
     #initial stair list
     global stair_list

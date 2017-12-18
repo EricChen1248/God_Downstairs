@@ -77,4 +77,5 @@ class Stair:
                 person.Cloud(self.count)
             elif self.type == "moving":
                 self.count += 1
+                person.General(self.count)
                 #person.Moving(self.count)
