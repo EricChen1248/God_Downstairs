@@ -6,11 +6,11 @@ class Stair:
     def __init__(self, main_width, count):
         """attributes of stair"""        
         type_number = random.randint(1, 20)
-        if 1 <= type_number <= 8:
+        if 1 <= type_number <= 10:
             self.type = "general"
-        elif 9 <= type_number <= 12:
+        elif 11 <= type_number <= 14:
             self.type = "hurt"
-        elif 13 <= type_number <= 16:
+        elif 15 <= type_number <= 17:
             self.type = "cloud"
         else:
             self.type = "moving"
