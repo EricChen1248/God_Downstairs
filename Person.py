@@ -6,7 +6,7 @@ display_width = None
 display_height = None
 
 width = 40
-height = 40
+height = 60
 
 dead_count = 2
 persons = []
@@ -68,12 +68,14 @@ class Person:
         # Update Life Drawing    
         Helper.UpdateLife()
 
-    def __init__(self, x, y, player_number):
+    def __init__(self, x, y, player_number, front, left1, left2, right1, right2):
         self.x = int(x)
         self.y = int(y)
         self.player_number = player_number
         
         # Base Initializes
+        self.movement = 0
+        self.last_move = 0
         self.life_count = 12
         self.stair = None
         self.alive = True
@@ -93,14 +95,36 @@ class Person:
         else:
             self.left = pygame.K_LEFT
             self.right = pygame.K_RIGHT
+
+        self.front_image = front
+        self.right_open = right1
+        self.right_close = right2
+        self.left_open = left1
+        self.left_close = left2
         
-    '''
     def Photo(self):
-        if i = 1:
-            return picture1
-        if i = 2: 
-            return picture2 
-    '''
+        if self.direction[-1] == 0:
+            self.last_move = 0
+            self.movement = 0
+            return self.front_image
+
+        if self.direction[-1] == self.last_move:
+            self.movement = (self.movement + 1) % 10
+        else:
+            self.movement = 0
+            self.last_move = self.direction[-1]
+        
+        if self.direction[-1] == -5:
+            if self.movement // 5 == 0:
+                return self.left_open
+
+            return self.left_close
+
+        if self.movement // 5 == 0:
+            return self.right_open
+
+        return self.right_close
+
 
     def Update(self, events):
         """ Update person's moving and life """

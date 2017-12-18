@@ -56,14 +56,17 @@ def Init():
         pygame.transform.scale(pygame.image.load('Generalstairs_2.jpg').convert_alpha(), (150, 20))
     
     Helper.stair_photos["Spike"] = \
-        pygame.transform.scale(pygame.image.load('Stingstairs.png').convert_alpha(), (150, 20))
+        pygame.transform.scale(pygame.image.load('Stingstairs.png').convert_alpha(), (150, 30))
 
     Helper.stair_photos["Cloud"] = \
         pygame.transform.scale(pygame.image.load('Cloudstairs.png').convert_alpha(), (150, 40))
 
-    # Initialize Persons
-    global person_photo 
-    person_photo = pygame.transform.scale(pygame.image.load('小傑正面.png'), (Person.width, Person.height)).convert_alpha()
+    
+    front = pygame.transform.scale(pygame.image.load('小傑正面.png'), (Person.width, Person.height)).convert_alpha()
+    right1 = pygame.transform.scale(pygame.image.load('小傑側面_右收步.png'), (Person.width, Person.height)).convert_alpha()
+    right2 = pygame.transform.scale(pygame.image.load('小傑側面_右跨步.png'), (Person.width, Person.height)).convert_alpha()
+    left1 = pygame.transform.scale(pygame.image.load('小傑側面_左收步.png'), (Person.width, Person.height)).convert_alpha()
+    left2 = pygame.transform.scale(pygame.image.load('小傑側面_左跨步.png'), (Person.width, Person.height)).convert_alpha()
     
     global persons
     persons = []
@@ -72,8 +75,7 @@ def Init():
     Person.display_height = display_height
 
     for i in range(Person.players):
-        persons.append(Person.Person(340 + 75 - 20 + i * 30, stair_list[3].y - 40, i))
-        persons[-1].photo = person_photo
+        persons.append(Person.Person(340 + 75 - 20 + i * 30, stair_list[3].y - Person.height,  i, front, left1, left2, right1, right2))
 
     
     # Draw life graphics
@@ -86,7 +88,8 @@ def BackgroundDisplay():
             game_display.blit(background_photo, [person.x, person.y], (person.x, person.y, Person.width, Person.height))
 
     for stair in stair_list:
-        game_display.blit(background_photo, [stair.x, stair.y], (stair.x, stair.y, Stair.width, Stair.height + 20)) # + 20 To accomodate for cloud size
+        height = Helper.stair_photos[stair.type].get_height()
+        game_display.blit(background_photo, [stair.x, stair.y - height + 20], (stair.x, stair.y - height + 20, Stair.width, height)) # + 20 To accomodate for cloud size
 
 def GraphicDisplay():
     """Moving objects display"""
@@ -94,14 +97,15 @@ def GraphicDisplay():
     # Display person images if alive
     for person in persons:
         if person.alive:
-            game_display.blit(person.photo, [person.x, person.y])
+            game_display.blit(person.Photo(), [person.x, person.y])
 
     # Regenerate stairs if top one as reached spikes
     RegenStairs()
     
     # Redraw stairs
     for stair in stair_list:
-        game_display.blit(Helper.stair_photos[stair.type], [stair.x, stair.y])
+        photo = Helper.stair_photos[stair.type]
+        game_display.blit(photo, [stair.x, stair.y - photo.get_height() + 20])
  
     # Pause and Restart(Button)
     Helper.Button("Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, Colors.green, Colors.bright_green,action = Helper.Paused)
