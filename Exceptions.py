@@ -1,0 +1,2 @@
+class GameOverError(Exception):
+    pass

@@ -1,4 +1,5 @@
 import pygame
+import Tool
 width = 40
 height = 60
 
@@ -56,12 +57,12 @@ class Person:
         # Handles verticla Movement
         self.y += 5                                    # 自然落下
         if self.y > self.display_height:               # 落下超過下邊線就GameEnd
-            pass #GameEnd()
+            Tool.GameEnd()
         if self.y <= 40:                                 # 若頭刺到上面刺刺
             self.y += 25                                # 繼續自然落下(從梯子上面被擠下)
             self.life_count += -5                       # 命減5
             if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
-                pass#GameEnd()
+                Tool.GameEnd()
 
     def General(self,count):
         ''' 人碰到一般梯子時 '''
@@ -76,7 +77,7 @@ class Person:
         if count == 1:
             self.life_count += -5                           # 命減5
             if self.life_count <= 0:                       # 檢查是否死掉，死了就GameEnd
-                pass#GameEnd()
+                Tool.GameEnd()
 
     def Cloud(self, count):
         ''' 人碰到消失梯子 '''

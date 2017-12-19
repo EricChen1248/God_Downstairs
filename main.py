@@ -6,6 +6,7 @@ import Stair
 import Tool
 import gc
 import os
+import Exceptions
 
 
 # Starting window position
@@ -72,6 +73,8 @@ def Init():
     global background_photo
     background_photo = pygame.image.load('BackgroundIce.png')
     background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
+
+    Tool.Init(game_display, display_width, display_height, clock)
     
 """ Button Motion """ 
 
@@ -215,32 +218,35 @@ def GameLoop():
 
     global events
     while not game_exit:
+        try:
+            #Update and Display
 
-        #Update and Display
+            events = pygame.event.get()
+            person.Update(events)
 
-        events = pygame.event.get()
-        person.Update(events)
+            for i in range(8):
+                stair_list[i].Update(person, display_width * 0.6)
 
-        for i in range(8):
-            stair_list[i].Update(person, display_width * 0.6)
+            BackgroundDisplay()
+            GraphicDisplay()
 
-        BackgroundDisplay()
-        GraphicDisplay()
+            for event in events:
+                #Quit
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    quit()
 
-        for event in events:
-            #Quit
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                #Press Space to Pause
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        Paused()
 
-            #Press Space to Pause
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE:
-                    Paused()
+            pygame.display.update()
+            clock.tick(60)
 
-        pygame.display.update()
-        clock.tick(60)
-
+        except Exceptions.GameOverError:
+            game_exit = True
+        
 def GameStart():
     """Define Game Intro screen"""
     intro = True
@@ -310,54 +316,6 @@ def GameStart():
         pygame.display.update()
         clock.tick(15)
 
-def GameEnd():
-    """Define Game End Screen"""
-
-    def RestartButton():
-        button_width_factor = 0.11
-        button_height_factor = 0.09
-        Tool.Button(game_display, "RESTART", display_width / 2 + 180, display_height / 1.15, 
-                        display_width * button_width_factor, display_height * button_height_factor, 
-                        green, Tool.bright_green, GameLoop)
-    fail = True
-
-    while fail:
-
-        # Quit
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
-               
-        # Background and text display
-        game_display.fill(Tool.white)
-        game_font = pygame.font.Font('JT1-09U.TTF', 115)
-        end_text = game_font.render("GAME OVER !!", True, Tool.red) 
-        end_rect = end_text.get_rect()
-        end_rect.center = ((display_width / 2),(display_height / 5))
-        game_display.blit(end_text, end_rect)
-
-        score_font = pygame.font.Font('JT1-09U.TTF', 100)
-        end_score_text, end_score_rect = Tool.TextObjects("得分：", score_font)
-        end_score_rect.center = ((display_width / 2 - 140), (display_height / 2.1))
-        game_display.blit(end_score_text, end_score_rect)
-
-        highest_font = pygame.font.Font('JT1-09U.TTF', 80)
-        highest_text, highest_rect = Tool.TextObjects("歷史高分：", highest_font)
-        highest_rect.center = ((display_width / 2 - 200), (display_height / 1.5))
-        game_display.blit(highest_text, highest_rect)
-
-        bottomtext_font = pygame.font.Font('JT1-09U.TTF', 50)
-        bottomtext_text, bottomtext_rect = Tool.TextObjects("太可惜了！再來一次吧！", bottomtext_font)
-        bottomtext_rect.center = ((display_width / 2 - 120), (display_height / 1.1))
-        game_display.blit(bottomtext_text, bottomtext_rect)
-
-
-        RestartButton()
-    # if score > highest_score:            # highest score用global，一開始就抓
-
-        pygame.display.update()
-        clock.tick(15)
 
 while not crashed:
     GameStart()
