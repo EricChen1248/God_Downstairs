@@ -284,7 +284,7 @@ def GameStart():
                 pygame.quit()
                 quit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
+                if event.key == pygame.K_SPACE:
                     StartGame()
 
         # display background and text
