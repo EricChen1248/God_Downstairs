@@ -25,9 +25,11 @@ class Person:
     '''
 
         
-    def Update(self, events):
+    def Update(who, self, events):
         ''' Update person's moving and life '''
         # Event Handling
+
+        
         for event in events:
             if event.type == pygame.KEYDOWN:            # 若按鍵被按下
                 if event.key == pygame.K_LEFT:          # 按左鍵

@@ -114,10 +114,12 @@ def Paused():
                 
         pygame.display.update()
         clock.tick(15)
+    game_display.blit(background_photo, [0, 0])
 
 def Unpause():
     global pause
     pause = False
+
 
 def QuitGame():
     pygame.quit()
@@ -217,17 +219,21 @@ def GameLoop():
     stair_list[3].x = 300
     stair_list[3].type = "general"
 
-    global person
     front_photo = pygame.image.load('小傑正面.png')
     right_photo = pygame.image.load('小傑側面_右跨步.png')
     left_photo = pygame.image.load('小傑側面_左跨步.png')
     front_photo = pygame.transform.scale(front_photo, (Person.width, Person.height))
     right_photo = pygame.transform.scale(right_photo, (Person.width, Person.height))
     left_photo = pygame.transform.scale(left_photo, (Person.width, Person.height))
-    person = Person.Person(300+75-20, stair_list[3].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
-
-    global score
-    score = Score.Score()
+    person_list = []
+    for i in players:
+        person = Person.Person(300+75 + i * 40, stair_list[3].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
+        person_list.append(person)
+    
+    score_list = []
+    for i in players:
+        score = Score.Score()
+        score_list.append(score)
 
     global events
     while not game_exit:
@@ -236,10 +242,13 @@ def GameLoop():
             
             BackgroundDisplay()
             events = pygame.event.get()
-            person.Update(events)
+            for person in person_list:
+                person.Update(events)
 
             for i in range(8):
                 stair_list[i].Update(person, display_width * 0.6)
+
+            for score in score_list
             score.Update()
             GraphicDisplay()
 
@@ -287,7 +296,7 @@ def GameStart():
         Tool.Button(game_display, "2 Player", display_width / 2 * (1 - button_width_factor), display_height * 0.5 * (1 - button_height_factor), 
                         display_width * button_width_factor, display_height * button_height_factor, 
                         Tool.red, Tool.bright_red, TogglePlayer1)
-   
+    
     def TogglePlayer2():
         nonlocal players
         players = 2
