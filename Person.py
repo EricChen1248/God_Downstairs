@@ -1,16 +1,20 @@
 import pygame
+width = 40
+height = 60
+
 class Person:
-    def __init__(self, width, height, x, y, photo, display_width, display_height):
-        self.width = width
-        self.height = height
+    def __init__(self, x, y, display_width, display_height, front, right, left):
         self.x = x
         self.y = y
-        self.x_change = 0
-        self.photo = photo        
+        self.x_change = 0      
         self.life_count = 12
         self.display_width = display_width
         self.display_height = display_height
         self.direction = [0]
+        self.left_photo = left
+        self.right_photo = right
+        self.front_photo = front
+        self.photo = front  # 預設開始是 正面
     '''
     def Photo(self):
         if i = 1:
@@ -37,20 +41,17 @@ class Person:
         # Handles horizontal movements
         self.x += self.direction[-1]
         if self.direction[-1] == 5:
-            person_photo = pygame.image.load('小傑側面_右跨步.png')
-            self.photo = pygame.transform.scale(person_photo, (self.width, self.height))
+            self.photo = self.right_photo
         elif self.direction[-1] == -5:
-            person_photo = pygame.image.load('小傑側面_左跨步.png')
-            self.photo = pygame.transform.scale(person_photo, (self.width, self.height))
+            self.photo = self.left_photo
         else:
-            person_photo = pygame.image.load('小傑正面.png')
-            self.photo = pygame.transform.scale(person_photo, (self.width, self.height)) 
+            self.photo = self.front_photo
 
         # Check horizontal bounds
         if self.x <= 0:                                 # 碰到左邊邊線不動
             self.x = 0
-        if self.x + self.width >= self.display_width * 0.6:  # 碰到右邊邊線不動
-            self.x = self.display_width * 0.6 - self.width
+        if self.x + width >= self.display_width * 0.6:  # 碰到右邊邊線不動
+            self.x = self.display_width * 0.6 - width
 
         # Handles verticla Movement
         self.y += 5                                    # 自然落下
