@@ -95,8 +95,6 @@ def Paused():
         Tool.Button(game_display, "Quit",display_width * 0.38,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2, Tool.red,Tool.bright_red,QuitGame)
 
         for event in pygame.event.get():
-            print(event)
-
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     Unpause()
@@ -207,9 +205,13 @@ def GameLoop():
     stair_list[3].type = "general"
 
     global person
-    person_photo = pygame.image.load('小傑正面.png')
-    person = Person.Person(40, 60, 300+75-20, stair_list[3].y - 60, person_photo, display_width, display_height)
-    person.photo = pygame.transform.scale(person_photo, (person.width, person.height))
+    front_photo = pygame.image.load('小傑正面.png')
+    right_photo = pygame.image.load('小傑側面_右跨步.png')
+    left_photo = pygame.image.load('小傑側面_左跨步.png')
+    front_photo = pygame.transform.scale(front_photo, (Person.width, Person.height))
+    right_photo = pygame.transform.scale(right_photo, (Person.width, Person.height))
+    left_photo = pygame.transform.scale(left_photo, (Person.width, Person.height))
+    person = Person.Person(300+75-20, stair_list[3].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
 
     global events
     while not game_exit:

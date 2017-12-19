@@ -1,15 +1,20 @@
 import pygame
+width = 40
+height = 60
+
 class Person:
-    def __init__(self, width, height, x, y, photo, display_width, display_height):
-        self.width = width
-        self.height = height
+    def __init__(self, x, y, display_width, display_height, front, right, left):
         self.x = x
         self.y = y
-        self.x_change = 0
-        self.photo = photo        
+        self.x_change = 0      
         self.life_count = 12
         self.display_width = display_width
         self.display_height = display_height
+        self.direction = [0]
+        self.left_photo = left
+        self.right_photo = right
+        self.front_photo = front
+        self.photo = front  # 預設開始是 正面
     '''
     def Photo(self):
         if i = 1:
@@ -25,25 +30,28 @@ class Person:
         for event in events:
             if event.type == pygame.KEYDOWN:            # 若按鍵被按下
                 if event.key == pygame.K_LEFT:          # 按左鍵
-                    self.x_change += -5
-                    person_photo = pygame.image.load('小傑側面_左跨步.png')
-                    self.photo = pygame.transform.scale(person_photo, (self.width, self.height))
+                    self.direction.append(-5)
                 if event.key == pygame. K_RIGHT:        # 按右鍵
-                    self.x_change += 5
-                    person_photo = pygame.image.load('小傑側面_右跨步.png')
-                    self.photo = pygame.transform.scale(person_photo, (self.width, self.height))
+                    self.direction.append(5)
             if event.type == pygame.KEYUP:              # 若按鍵放開就不動
-                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                    self.x_change = 0
-                    person_photo = pygame.image.load('小傑正面.png')
-                    self.photo = pygame.transform.scale(person_photo, (self.width, self.height))        
+                if event.key == pygame.K_LEFT:
+                    self.direction.remove(-5)
+                elif event.key == pygame.K_RIGHT:
+                    self.direction.remove(5)       
         # Handles horizontal movements
-        self.x += self.x_change
+        self.x += self.direction[-1]
+        if self.direction[-1] == 5:
+            self.photo = self.right_photo
+        elif self.direction[-1] == -5:
+            self.photo = self.left_photo
+        else:
+            self.photo = self.front_photo
+
         # Check horizontal bounds
         if self.x <= 0:                                 # 碰到左邊邊線不動
             self.x = 0
-        if self.x + self.width >= self.display_width * 0.6:  # 碰到右邊邊線不動
-            self.x = self.display_width * 0.6 - self.width
+        if self.x + width >= self.display_width * 0.6:  # 碰到右邊邊線不動
+            self.x = self.display_width * 0.6 - width
 
         # Handles verticla Movement
         self.y += 5                                    # 自然落下
@@ -79,22 +87,10 @@ class Person:
         if count <= 5:
             self.y += -7
     def Moving(self, count, hit_count):
-        if hit_count == 0:
-            #還沒撞到右邊邊線
-            if self.x + self.width + 0.8 < self.display_width * 0.6 - 22:
-                self.x += 0.8
-            elif self.x + self.width + 0.8 >= self.display_width * 0.6 -22:
-                hit_count = 1
-                
-        elif hit_count == 1:
-            #還沒撞到左邊邊線
-            if self.x - 0.8 > self.original_x - 90: #左邊界線是初始位向左90
-                self.x -= 0.8
-            elif self.x - 0.8 <= self.original_x:
-                hit_count = 0
+        self.x += 0.8 - hit_count * 1.6                     # hit_count用來決定向左或向右
         self.y += -7
-        if count == 1:
-            if self.life_count < 12:                        # 若沒滿血就加一
+        if count == 1:                                      # 若沒滿血就加一
+            if self.life_count < 12:                        
                 self.life_count += 1
 
     
