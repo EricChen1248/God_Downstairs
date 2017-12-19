@@ -25,22 +25,34 @@ class Person:
     '''
 
         
-    def Update(who, self, events):
+    def Update(self, who, events):
         ''' Update person's moving and life '''
         # Event Handling
 
         
         for event in events:
             if event.type == pygame.KEYDOWN:            # 若按鍵被按下
-                if event.key == pygame.K_LEFT:          # 按左鍵
-                    self.direction.append(-5)
-                if event.key == pygame. K_RIGHT:        # 按右鍵
-                    self.direction.append(5)
+                if who == 1:
+                    if event.key == pygame.K_LEFT:          # 按左鍵
+                        self.direction.append(-5)
+                    if event.key == pygame. K_RIGHT:        # 按右鍵
+                        self.direction.append(5)
+                if who == 2:
+                    if event.key == pygame.K_a:          # 按左鍵
+                        self.direction.append(-5)
+                    if event.key == pygame. K_d:        # 按右鍵
+                        self.direction.append(5)
             if event.type == pygame.KEYUP:              # 若按鍵放開就不動
-                if event.key == pygame.K_LEFT:
-                    self.direction.remove(-5)
-                elif event.key == pygame.K_RIGHT:
-                    self.direction.remove(5)       
+                if who == 1:
+                    if event.key == pygame.K_LEFT:
+                        self.direction.remove(-5)
+                    elif event.key == pygame.K_RIGHT:
+                        self.direction.remove(5)
+                if who == 2:
+                    if event.key == pygame.K_a:
+                        self.direction.remove(-5)
+                    elif event.key == pygame.K_d:
+                        self.direction.remove(5)
         # Handles horizontal movements
         self.x += self.direction[-1]
         if self.direction[-1] == 5:
