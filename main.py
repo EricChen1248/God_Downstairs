@@ -3,6 +3,7 @@ import time
 import random
 import Person
 import Stair
+import Score
 import Tool
 import gc
 import os
@@ -128,12 +129,7 @@ def Restart():
 
 def GraphicDisplay():
     """Moving objects display"""
-   
-    #person
-    global person
-    game_display.blit(person.photo, [person.x, person.y])
-
-   
+     
     #stairs
     StairMoving()
     global general_stair_photo
@@ -152,6 +148,10 @@ def GraphicDisplay():
             stair_photo = moving_stair_photo
 
         game_display.blit(stair_photo, [stair.x, stair.y])
+
+    #person
+    global person
+    game_display.blit(person.photo, [person.x, person.y])
  
     #life
     life = person.life_count
@@ -160,8 +160,13 @@ def GraphicDisplay():
     for i in range(12 - life): 
         pygame.draw.rect(game_display, Tool.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
     
-
-    #points
+    # Current score
+    pygame.draw.rect(game_display, Tool.white,[display_width* 0.8, display_height * 0.3, 300, 50]) 
+    
+    game_font = pygame.font.Font('JT1-09U.TTF', 48)
+    title_name, title_rect = Tool.TextObjects(str(score.current_score), game_font)
+    title_rect.center = ((display_width * 0.84), (display_height * 0.35))
+    game_display.blit(title_name, title_rect)
 
     #Pause and Restart(Button)
     Tool.Button(game_display, "Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, Tool.green, Tool.bright_green,action = Paused)
@@ -221,6 +226,9 @@ def GameLoop():
     left_photo = pygame.transform.scale(left_photo, (Person.width, Person.height))
     person = Person.Person(300+75-20, stair_list[3].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
 
+    global score
+    score = Score.Score()
+
     global events
     while not game_exit:
         try:
@@ -232,7 +240,7 @@ def GameLoop():
 
             for i in range(8):
                 stair_list[i].Update(person, display_width * 0.6)
-
+            score.Update()
             GraphicDisplay()
 
             for event in events:

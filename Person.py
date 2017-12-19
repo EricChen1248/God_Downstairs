@@ -85,7 +85,7 @@ class Person:
             if self.life_count < 12:                        # 若沒滿血就加一
                 self.life_count += 1
 
-        if count <= 5:
+        if count <= 10:
             self.y += -7
     def Moving(self, count, hit_count):
         self.x += 0.8 - hit_count * 1.6                     # hit_count用來決定向左或向右
