@@ -16,6 +16,7 @@ class Person:
         self.right_photo = right
         self.front_photo = front
         self.photo = front  # 預設開始是 正面
+        self.alive = True
     '''
     def Photo(self):
         if i = 1:
@@ -23,13 +24,12 @@ class Person:
         if i = 2: 
             return picture2 
     '''
-
         
     def Update(self, who, events):
         ''' Update person's moving and life '''
         # Event Handling
-
-        
+        if self.alive == False:
+            return 
         for event in events:
             if event.type == pygame.KEYDOWN:            # 若按鍵被按下
                 if who == 1:
@@ -37,7 +37,7 @@ class Person:
                         self.direction.append(-5)
                     if event.key == pygame. K_RIGHT:        # 按右鍵
                         self.direction.append(5)
-                if who == 2:
+                elif who == 2:
                     if event.key == pygame.K_a:          # 按左鍵
                         self.direction.append(-5)
                     if event.key == pygame. K_d:        # 按右鍵
@@ -48,11 +48,12 @@ class Person:
                         self.direction.remove(-5)
                     elif event.key == pygame.K_RIGHT:
                         self.direction.remove(5)
-                if who == 2:
+                elif who == 2:
                     if event.key == pygame.K_a:
                         self.direction.remove(-5)
                     elif event.key == pygame.K_d:
                         self.direction.remove(5)
+                        
         # Handles horizontal movements
         self.x += self.direction[-1]
         if self.direction[-1] == 5:
@@ -71,13 +72,17 @@ class Person:
         # Handles verticla Movement
         self.y += 5                                    # 自然落下
         if self.y > self.display_height:               # 落下超過下邊線就GameEnd
-            Tool.GameEnd()
+            self.Death()
         if self.y <= 40:                                 # 若頭刺到上面刺刺
             self.y += 25                                # 繼續自然落下(從梯子上面被擠下)
             self.life_count += -5                       # 命減5
             if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
-                Tool.GameEnd()
+                self.Death()
 
+    def Death(self):
+        self.alive = False
+        self.life_count = 0
+        Tool.GameEndCount()
     def General(self,count):
         ''' 人碰到一般梯子時 '''
         self.y += -7                                   # 若梯子是-10往上，要抵銷自然落下就要-20
@@ -91,7 +96,7 @@ class Person:
         if count == 1:
             self.life_count += -5                           # 命減5
             if self.life_count <= 0:                       # 檢查是否死掉，死了就GameEnd
-                Tool.GameEnd()
+                self.Death()
 
     def Cloud(self, count):
         ''' 人碰到消失梯子 '''

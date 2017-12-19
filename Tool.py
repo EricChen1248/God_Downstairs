@@ -10,20 +10,27 @@ green = (0,200,0)
 bright_red = (255,0,0)
 bright_green = (0,255,0)
 block_color = (53,115,255) 
+
 game_display = None
 display_width =  0
 display_height = 0
 clock = None
+death_count = 0
+players = 0
+
 
 def Init(display, width, height, clock_):
     global game_display
     global display_width
     global display_height
     global clock
+    global death_count
     game_display = display
     display_width = width
     display_height = height
     clock = clock_
+    death_count = 0
+
 
 def TextObjects(text, font, color = black):
     """ Change word to graphics """
@@ -47,6 +54,17 @@ def Button(where,msg,x,y,w,h,ic,ac,action = None):
     text_surf, text_rect = TextObjects(msg, small_font)
     text_rect.center = ( (x+(w/2)), (y+(h/2)) )
     where.blit(text_surf, text_rect) 
+
+
+def GameEndCount():
+    global death_count
+    death_count += 1
+    print(death_count)
+    
+    if death_count == players:
+        GameEnd()
+
+
 
 def GameEnd():
     """Define Game End Screen"""
@@ -104,3 +122,4 @@ def GameEnd():
 
         pygame.display.update()
         clock.tick(15)
+

@@ -42,38 +42,38 @@ def NonMovingBackgroundDisplay():
     title_rect.center = ((display_width * 0.68), (display_height * 0.15))
     game_display.blit(title_name, title_rect)
 
-    # User name and photo
-    user_image = pygame.image.load('lckung.png')
-    user_image_size = pygame.transform.scale(user_image, (int(display_width * 0.05), int(display_height * 0.1)))
-    game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.2])
-
-    game_font = pygame.font.Font('JT1-09U.TTF', 48)
-    user_name, user_rect = Tool.TextObjects("小傑", game_font)
-    user_rect.center = ((display_width * 0.72), (display_height * 0.25))
-    game_display.blit(user_name, user_rect)
-
     # Current score
     game_font = pygame.font.Font('JT1-09U.TTF', 48)
     title_name, title_rect = Tool.TextObjects("現在分數：", game_font)
-    title_rect.center = ((display_width * 0.7), (display_height * 0.35))
+    title_rect.center = ((display_width * 0.7), (display_height * 0.25))
     game_display.blit(title_name, title_rect)
+
+    # User name and photo
+    user_image = pygame.image.load('lckung.png')
+    user_image_size = pygame.transform.scale(user_image, (int(display_width * 0.05), int(display_height * 0.1)))
+    game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.3])
+
+    game_font = pygame.font.Font('JT1-09U.TTF', 48)
+    user_name, user_rect = Tool.TextObjects("小傑", game_font)
+    user_rect.center = ((display_width * 0.72), (display_height * 0.35))
+    game_display.blit(user_name, user_rect)
 
     # Life
-    game_font = pygame.font.Font('JT1-09U.TTF', 48)
-    title_name, title_rect = Tool.TextObjects("命：", game_font)
-    title_rect.center = ((display_width * 0.65), (display_height * 0.45))
-    game_display.blit(title_name, title_rect)
+    for j in range(Tool.players):
+        game_font = pygame.font.Font('JT1-09U.TTF', 48)
+        title_name, title_rect = Tool.TextObjects("命：", game_font)
+        title_rect.center = ((display_width * 0.65), (display_height * 0.45 + 100 * j))
+        game_display.blit(title_name, title_rect)
 
-    for i in range(12):
-        pygame.draw.rect(game_display, Tool.black,[display_width*(0.7+0.0195*i), display_height*0.42, display_width * 0.02 , display_height*0.06],1) 
+        for i in range(12):
+            pygame.draw.rect(game_display, Tool.black,[display_width*(0.7+0.0195*i), display_height*0.42 + 100 * j, display_width * 0.02 , display_height*0.06],1) 
 
 def BackgroundDisplay():
     #截取背景部分圖覆蓋，不用整張背景覆蓋
-    game_display.blit(background_photo, [person.x, person.y], [person.x, person.y, Person.width, Person.height])
-    for i in range(8):
-        stair = stair_list[i]
+    for person in person_list:
+        game_display.blit(background_photo, [person.x, person.y], [person.x, person.y, Person.width, Person.height])
+    for stair in stair_list:
         game_display.blit(background_photo, [stair.x, stair.y], [stair.x, stair.y, 150, 40])
-
 
 def Init():
     global background_photo
@@ -151,26 +151,27 @@ def GraphicDisplay():
 
         game_display.blit(stair_photo, [stair.x, stair.y])
 
-    #person
+    # person & life
     global person
-    game_display.blit(person.photo, [person.x, person.y])
+    for j in range(Tool.players):
+        person = person_list[j]
+        game_display.blit(person.photo, [person.x, person.y])
  
-    #life
-    life = person.life_count
-    for i in range(life): 
-        pygame.draw.rect(game_display, Tool.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
-    for i in range(12 - life): 
-        pygame.draw.rect(game_display, Tool.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
-    
+        life = person.life_count
+        for i in range(life): 
+            pygame.draw.rect(game_display, Tool.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 100 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+        for i in range(12 - life): 
+            pygame.draw.rect(game_display, Tool.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 100 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+        
     # Current score
-    pygame.draw.rect(game_display, Tool.white,[display_width* 0.8, display_height * 0.3, 300, 50]) 
+    pygame.draw.rect(game_display, Tool.white,[display_width* 0.8, display_height * 0.2, 300, 50]) 
     
     game_font = pygame.font.Font('JT1-09U.TTF', 48)
     title_name, title_rect = Tool.TextObjects(str(score.current_score), game_font)
-    title_rect.center = ((display_width * 0.84), (display_height * 0.35))
+    title_rect.center = ((display_width * 0.84), (display_height * 0.25))
     game_display.blit(title_name, title_rect)
 
-    #Pause and Restart(Button)
+    # Pause and Restart(Button)
     Tool.Button(game_display, "Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, Tool.green, Tool.bright_green,action = Paused)
     Tool.Button(game_display, "Restart!",display_width * 0.7, display_height * 0.85, display_width * 0.2, display_height * 0.1, Tool.red, Tool.bright_red,action = Restart)
 
@@ -225,15 +226,15 @@ def GameLoop():
     front_photo = pygame.transform.scale(front_photo, (Person.width, Person.height))
     right_photo = pygame.transform.scale(right_photo, (Person.width, Person.height))
     left_photo = pygame.transform.scale(left_photo, (Person.width, Person.height))
+    
+    global person_list
     person_list = []
-    for i in players:
+    for i in range(Tool.players):
         person = Person.Person(300+75 + i * 40, stair_list[3].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
         person_list.append(person)
     
-    score_list = []
-    for i in players:
-        score = Score.Score()
-        score_list.append(score)
+    global score
+    score = Score.Score()
 
     global events
     while not game_exit:
@@ -242,14 +243,17 @@ def GameLoop():
             
             BackgroundDisplay()
             events = pygame.event.get()
-            for person in person_list:
-                person.Update(events)
-
             for i in range(8):
-                stair_list[i].Update(person, display_width * 0.6)
+                stair_list[i].Update(display_width * 0.6)
+                for person in person_list:
+                    stair_list[i].HitPersonUpdate(person)
 
-            for score in score_list
+            for i in range(Tool.players):
+                person = person_list[i]
+                person.Update(i + 1, events)
+
             score.Update()
+
             GraphicDisplay()
 
             for event in events:
@@ -298,16 +302,15 @@ def GameStart():
                         Tool.red, Tool.bright_red, TogglePlayer1)
     
     def TogglePlayer2():
-        nonlocal players
-        players = 2
+        Tool.players = 2
         clock.tick(20)
 
     def TogglePlayer1():
-        nonlocal players
-        players = 1
+        Tool.players = 1
         clock.tick(20)
 
-    players = 1
+
+    Tool.players = 1
     while intro:
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
@@ -330,7 +333,7 @@ def GameStart():
         
         StartButton()    
 
-        if players == 1:
+        if Tool.players == 1:
             PlayerOneButton()
         else:
             PlayerTwoButton()
