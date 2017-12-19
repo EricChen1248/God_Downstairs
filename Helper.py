@@ -175,9 +175,9 @@ def Paused():
         clock.tick(15)
 
     NonMovingBackgroundDisplay()
-    UpdateLife()
+    DrawLife()
 
-def UpdateLife():
+def DrawLife():
     count = 0
     for person in Person.persons:
         life = person.life_count

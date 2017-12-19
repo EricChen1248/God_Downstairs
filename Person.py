@@ -51,12 +51,13 @@ class Person:
             return
         # Set person height to be standing on stair
         self.y = stair.y - height
-        # Execute stair reactions
-        self.stair_reaction[stair.type](stair)
         # If current stair isn't the same stair as the last collision
         if self.stair is not stair:
             self.UpdateLife(1)
-            self.stair = stair
+        # Execute stair reactions
+        self.stair_reaction[stair.type](stair)
+            
+        self.stair = stair
 
     def UpdateLife(self, reduce = -5):            
         self.life_count += reduce
@@ -66,7 +67,7 @@ class Person:
             self.Death()
         
         # Update Life Drawing    
-        Helper.UpdateLife()
+        Helper.DrawLife()
 
     def __init__(self, x, y, player_number, front, left1, left2, right1, right2):
         self.x = int(x)
@@ -187,7 +188,7 @@ class Person:
         
         # Update Life graphics
         self.life_count = 0
-        Helper.UpdateLife()
+        Helper.DrawLife()
 
         # If all players are dead, end game
         if dead_count <= 0:

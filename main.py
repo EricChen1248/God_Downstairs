@@ -79,7 +79,7 @@ def Init():
 
     
     # Draw life graphics
-    Helper.UpdateLife()
+    Helper.DrawLife()
     
 def BackgroundDisplay():
     """ Blits background over moving parts (players and stairs) of the game """
