@@ -27,6 +27,7 @@ def NonMovingBackgroundDisplay():
     """Not-moving objects display"""
     # background
     game_display.fill(Tool.white)
+    game_display.blit(background_photo, [0, 0])
 
     # title
     game_font = pygame.font.Font('JT1-09U.TTF', 60)
@@ -66,14 +67,18 @@ def NonMovingBackgroundDisplay():
         pygame.draw.rect(game_display, Tool.black,[display_width*(0.7+0.0195*i), display_height*0.42, display_width * 0.02 , display_height*0.06],1) 
 
 def BackgroundDisplay():
-    global background_photo
-    game_display.blit(background_photo, [0, 0])
+    #截取背景部分圖覆蓋，不用整張背景覆蓋
+    game_display.blit(background_photo, [person.x, person.y], [person.x, person.y, Person.width, Person.height])
+    for i in range(8):
+        stair = stair_list[i]
+        game_display.blit(background_photo, [stair.x, stair.y], [stair.x, stair.y, 150, 40])
+
 
 def Init():
     global background_photo
     background_photo = pygame.image.load('BackgroundIce.png')
     background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
-
+    
     Tool.Init(game_display, display_width, display_height, clock)
     
 """ Button Motion """ 
@@ -220,14 +225,14 @@ def GameLoop():
     while not game_exit:
         try:
             #Update and Display
-
+            
+            BackgroundDisplay()
             events = pygame.event.get()
             person.Update(events)
 
             for i in range(8):
                 stair_list[i].Update(person, display_width * 0.6)
 
-            BackgroundDisplay()
             GraphicDisplay()
 
             for event in events:
