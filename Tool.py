@@ -17,6 +17,7 @@ display_height = 0
 clock = None
 death_count = 0
 players = 0
+sounds = {}
 
 
 def Init(display, width, height, clock_):
@@ -31,6 +32,8 @@ def Init(display, width, height, clock_):
     clock = clock_
     death_count = 0
 
+def AddSound(name, sound):
+    sounds[name] = sound
 
 def TextObjects(text, font, color = black):
     """ Change word to graphics """
@@ -59,7 +62,6 @@ def Button(where,msg,x,y,w,h,ic,ac,action = None):
 def GameEndCount():
     global death_count
     death_count += 1
-    print(death_count)
     
     if death_count == players:
         GameEnd()

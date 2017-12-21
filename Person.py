@@ -74,15 +74,18 @@ class Person:
         if self.y > self.display_height:               # 落下超過下邊線就GameEnd
             self.Death()
         if self.y <= 40:                                 # 若頭刺到上面刺刺
+            Tool.sounds["Hurt"].play()
             self.y += 25                                # 繼續自然落下(從梯子上面被擠下)
             self.life_count += -5                       # 命減5
             if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
                 self.Death()
 
     def Death(self):
+        Tool.sounds["Death"].play()
         self.alive = False
         self.life_count = 0
         Tool.GameEndCount()
+
     def General(self,count):
         ''' 人碰到一般梯子時 '''
         self.y += -7                                   # 若梯子是-10往上，要抵銷自然落下就要-20
@@ -94,6 +97,7 @@ class Person:
         ''' 人碰到刺刺梯子時 '''
         self.y += -7
         if count == 1:
+            Tool.sounds["Hurt"].play()
             self.life_count += -5                           # 命減5
             if self.life_count <= 0:                       # 檢查是否死掉，死了就GameEnd
                 self.Death()

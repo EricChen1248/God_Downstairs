@@ -14,6 +14,8 @@ import Exceptions
 os.environ['SDL_VIDEO_WINDOW_POS'] = '20,34'
 
 # initiation and display
+pygame.mixer.pre_init(44100, -16, 2, 512)
+pygame.mixer.init()
 pygame.init() 
 display_width = 1200
 display_height = 640
@@ -81,6 +83,8 @@ def Init():
     background_photo = pygame.transform.scale(background_photo, (int(display_width * 0.6), display_height))
     
     Tool.Init(game_display, display_width, display_height, clock)
+    Tool.AddSound("Hurt", pygame.mixer.Sound('短慘叫.wav'))
+    Tool.AddSound("Death", pygame.mixer.Sound('長慘叫.wav'))
     
 """ Button Motion """ 
 
