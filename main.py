@@ -255,6 +255,8 @@ def GameLoop():
             for i in range(Tool.players):
                 person = person_list[i]
                 person.Update(i + 1, events)
+            if Tool.players == 2:
+                Person.PersonInteraction(person_list)
 
             score.Update()
 

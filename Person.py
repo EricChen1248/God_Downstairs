@@ -1,5 +1,6 @@
 import pygame
 import Tool
+import math
 width = 40
 height = 60
 
@@ -116,6 +117,21 @@ class Person:
         if count == 1:                                      # 若沒滿血就加一
             if self.life_count < 12:                        
                 self.life_count += 1
+def PersonInteraction(person_list):
+    ''' 雙人版互動'''
+    
+    dx = person_list[0].x - person_list[1].x
+    dy = person_list[0].y - person_list[1].y
+    
+    if abs(dx) < width - 3 and abs(dy) < height - 3:
+    #有重疊到
+        delta_x = dx + width
+        delta_y = dy + height
+        if abs(delta_x) >= abs(delta_y):
+            person_list[0].x -= delta_x // 2
+            person_list[1].x += (delta_x - delta_x // 2)
+        else:
+            person_list[0].y -= delta_y
 
     
 
