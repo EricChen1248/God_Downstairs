@@ -113,8 +113,7 @@ def Paused():
                     Unpause()
 
             if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                QuitGame()
                 
         pygame.display.update()
         clock.tick(15)
@@ -268,8 +267,7 @@ def GameLoop():
             for event in events:
                 #Quit
                 if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
+                    QuitGame()
 
                 #Press Space to Pause
                 if event.type == pygame.KEYDOWN:
@@ -336,8 +334,7 @@ def GameStart():
     while intro:
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                QuitGame()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     StartGame()
