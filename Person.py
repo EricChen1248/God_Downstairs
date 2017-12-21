@@ -118,6 +118,7 @@ class Person:
         if count == 1:                                      # 若沒滿血就加一
             if self.life_count < 12:                        
                 self.life_count += 1
+                
 def PersonInteraction(person_list):
     ''' 雙人版互動'''
     '''
@@ -151,19 +152,19 @@ def PersonInteraction(person_list):
     dy = person_list[0].y - person_list[1].y
     delta_x = abs(dx) - width
     delta_y = abs(dy) - height
-    if abs(dx) <= width and abs(dy) <= height:
-        if delta_x >= delta_y:
+    if abs(dx) < width and abs(dy) < height:
+        if abs(dx) > abs(dy):
             if person_list[0].x < person_list[1].x:
-                person_list[0].x -= delta_x // 2
-                person_list[1].x += (delta_x - delta_x // 2)
-            else:
                 person_list[0].x += delta_x // 2
-                person_list[1].x -= (delta_x - delta_x // 2)            
+                person_list[1].x -= (delta_x - delta_x // 2)
+            else:
+                person_list[0].x -= delta_x // 2
+                person_list[1].x += (delta_x - delta_x // 2)            
         else:
             if person_list[0].y < person_list[1].y:
-                person_list[0].y -= delta_y
+                person_list[0].y += delta_y
             else:
-                person_list[1].y -= delta_y
+                person_list[1].y += delta_y
             
             
 

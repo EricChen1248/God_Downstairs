@@ -241,6 +241,9 @@ def GameLoop():
     score = Score.Score()
 
     global events
+
+    alt = False
+    f4 = False
     while not game_exit:
         try:
             #Update and Display
@@ -272,6 +275,19 @@ def GameLoop():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_SPACE:
                         Paused()
+                    if event.key == pygame.K_F4:
+                        f4 = True
+                    if event.key == pygame.K_LALT or event.key == pygame.K_RALT:
+                        alt = True
+
+                if alt and f4:
+                    QuitGame()
+
+                if event.type == pygame.KEYUP:
+                    if event.key == pygame.K_F4:
+                        f4 = False
+                    if event.key == pygame.K_LALT or event.key == pygame.K_RALT:
+                        alt = False
 
             pygame.display.update()
             clock.tick(60)
