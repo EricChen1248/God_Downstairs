@@ -221,8 +221,8 @@ def GameLoop():
     for i in range(8):
         new_stair = Stair.Stair(display_width * 0.6, i)
         stair_list.append(new_stair)
-    stair_list[3].x = 300
-    stair_list[3].type = "general"
+    stair_list[4].x = 300
+    stair_list[4].type = "general"
 
     front_photo = pygame.image.load('小傑正面.png')
     right_photo = pygame.image.load('小傑側面_右跨步.png')
@@ -234,7 +234,7 @@ def GameLoop():
     global person_list
     person_list = []
     for i in range(Tool.players):
-        person = Person.Person(300+75 + i * 40, stair_list[3].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
+        person = Person.Person(300+75 + i * 40, stair_list[4].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
         person_list.append(person)
     
     global score

@@ -85,6 +85,7 @@ class Person:
         Tool.sounds["Death"].play()
         self.alive = False
         self.life_count = 0
+        self.y = 1000
         Tool.GameEndCount()
 
     def General(self,count):
@@ -119,11 +120,24 @@ class Person:
                 self.life_count += 1
 def PersonInteraction(person_list):
     ''' 雙人版互動'''
-    
+    '''
     dx = person_list[0].x - person_list[1].x
     dy = person_list[0].y - person_list[1].y
     
-    if abs(dx) < width - 3 and abs(dy) < height - 3:
+    if abs(dx) < width and height - 5 < abs(dy) < height + 5:
+        if person_list[0].y < person_list[1].y:
+            person_list[0].y = person_list[1].y - height
+        else:
+            person_list[1].y = person_list[0].y - height
+    elif width - 5 < abs(dx) < width + 5 and abs(dy) < height:
+        delta_x = dx + width
+        person_list[0].x -= delta_x // 2
+        person_list[1].x += (delta_x - delta_x // 2)
+            
+
+
+
+    if abs(dx) < width and abs(dy) < height:
     #有重疊到
         delta_x = dx + width
         delta_y = dy + height
@@ -132,6 +146,26 @@ def PersonInteraction(person_list):
             person_list[1].x += (delta_x - delta_x // 2)
         else:
             person_list[0].y -= delta_y
+    '''
+    dx = person_list[0].x - person_list[1].x
+    dy = person_list[0].y - person_list[1].y
+    delta_x = abs(dx) - width
+    delta_y = abs(dy) - height
+    if abs(dx) <= width and abs(dy) <= height:
+        if delta_x >= delta_y:
+            if person_list[0].x < person_list[1].x:
+                person_list[0].x -= delta_x // 2
+                person_list[1].x += (delta_x - delta_x // 2)
+            else:
+                person_list[0].x += delta_x // 2
+                person_list[1].x -= (delta_x - delta_x // 2)            
+        else:
+            if person_list[0].y < person_list[1].y:
+                person_list[0].y -= delta_y
+            else:
+                person_list[1].y -= delta_y
+            
+            
 
     
 
