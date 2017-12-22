@@ -233,7 +233,7 @@ def GameLoop():
     global person_list
     person_list = []
     for i in range(Tool.players):
-        person = Person.Person(300+75 + i * 40, stair_list[4].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
+        person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
         person_list.append(person)
     
     global score
