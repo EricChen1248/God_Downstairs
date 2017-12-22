@@ -13,6 +13,9 @@ stair_photos = {}
 
 skip_start = False
 
+alt = False
+f4 = False
+
 def Init(display, width, height, oClock):
     global game_display
     game_display = display
@@ -69,11 +72,13 @@ def GameStart():
     while intro:
         for event in pygame.event.get():    
             if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                QuitGame()
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     StartGame()
+
+            CheckAltF4(event)
 
         StartButton()    
 
@@ -134,6 +139,8 @@ def GameEnd():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     Restart()
+
+            CheckAltF4(event)
                
         RestartButton()
         # if score > highest_score:            # highest score用global，一開始就抓
@@ -161,12 +168,13 @@ def Paused():
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                pygame.quit()
-                quit()
+                QuitGame()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     Unpause()
+                    
+            CheckAltF4(event)
                 
         Button("Continue",display_width * 0.05,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2, Colors.green, Colors.bright_green,Unpause)
         Button("Quit",display_width * 0.38,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2, Colors.red, Colors.bright_red,QuitGame)
@@ -186,6 +194,26 @@ def DrawLife():
         for i in range(12 - life): 
             pygame.draw.rect(game_display, Colors.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 1 + count * 60, display_width * 0.02 - 2, display_height*0.06 - 2]) 
         count += 1
+
+def CheckAltF4(event):
+    global alt
+    global f4
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LALT or event.key == pygame.K_RALT:
+            alt = True
+        
+        elif event.key == pygame.K_F4:
+            f4 = True 
+
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_LALT or event.key == pygame.K_RALT:
+            alt = False
+        
+        elif event.key == pygame.K_F4:
+            f4 = False 
+
+    if alt and f4:
+        QuitGame()
 
 def TextObjects(text, font, color = Colors.black):
     """ Change word to graph """

@@ -171,6 +171,8 @@ def GameLoop():
                 if event.key == pygame.K_SPACE:
                     Helper.Paused()
 
+            Helper.CheckAltF4(event)
+
         pygame.display.update()
         clock.tick(60)
 
