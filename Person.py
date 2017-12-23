@@ -88,21 +88,26 @@ class Person:
         self.y = 1000
         Tool.GameEndCount()
 
-    def General(self,count):
-        ''' 人碰到一般梯子時 '''
-        self.y += -7                                   # 若梯子是-10往上，要抵銷自然落下就要-20
+    def General(self,count, adjust_y):
+        ''' 人碰到一般梯子時 '''                                
         if count == 1:
+            self.y -= adjust_y
             if self.life_count < 12:                        # 若沒滿血就加一
                 self.life_count += 1
+        else:
+            self.y += -7                                     # 若梯子是-10往上，要抵銷自然落下就要-20
+    
             
-    def Hurt(self, count):
+    def Hurt(self, count, adjust_y):
         ''' 人碰到刺刺梯子時 '''
-        self.y += -7
         if count == 1:
+            self.y -= adjust_y
             Tool.sounds["Hurt"].play()
             self.life_count += -5                           # 命減5
             if self.life_count <= 0:                       # 檢查是否死掉，死了就GameEnd
                 self.Death()
+        else:
+            self.y += -7
 
     def Cloud(self, count):
         ''' 人碰到消失梯子 '''
@@ -112,12 +117,15 @@ class Person:
 
         if count <= 10:
             self.y += -7
-    def Moving(self, count, hit_count):
+
+    def Moving(self, count, hit_count, adjust_y):
         self.x += 0.8 - hit_count * 1.6                     # hit_count用來決定向左或向右
-        self.y += -7
         if count == 1:                                      # 若沒滿血就加一
+            self.y -= adjust_y
             if self.life_count < 12:                        
                 self.life_count += 1
+        else:
+            self.y += -7
                 
 def PersonInteraction(person_list):
     ''' 雙人版互動'''
