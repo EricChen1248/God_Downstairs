@@ -65,10 +65,10 @@ class Person:
             self.photo = self.front_photo
 
         # Check horizontal bounds
-        if self.x <= 0:                                 # 碰到左邊邊線不動
-            self.x = 0
-        if self.x + width >= self.display_width * 0.6:  # 碰到右邊邊線不動
-            self.x = self.display_width * 0.6 - width
+        if self.x <= 31:                                 # 碰到左邊邊線不動
+            self.x = 31
+        if self.x + width >= self.display_width * 0.6 - 31:  # 碰到右邊邊線不動
+            self.x = self.display_width * 0.6 - width - 31
 
         # Handles verticla Movement
         self.y += 5                                    # 自然落下
