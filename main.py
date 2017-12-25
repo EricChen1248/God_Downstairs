@@ -141,19 +141,6 @@ def GraphicDisplay():
     global hurt_stair_photo
     global cloud_stair_photo
 
-    for i in range(8):
-        stair = stair_list[i]
-        if stair.type == "general":
-            stair_photo = general_stair_photo
-        elif stair.type == "hurt":
-            stair_photo = hurt_stair_photo
-        elif stair.type == "cloud":
-            stair_photo = cloud_stair_photo
-        elif stair.type == "moving":
-            stair_photo = moving_stair_photo
-
-        game_display.blit(stair_photo, [stair.x, stair.y])
-
     # person & life
     global person
     for j in range(Tool.players):
@@ -165,6 +152,19 @@ def GraphicDisplay():
             pygame.draw.rect(game_display, Tool.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 100 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
         for i in range(12 - life): 
             pygame.draw.rect(game_display, Tool.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 100 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+    
+    for i in range(8):
+        stair = stair_list[i]
+        if stair.type == "general":
+            stair_photo = general_stair_photo
+        elif stair.type == "hurt":
+            stair_photo = hurt_stair_photo
+        elif stair.type == "cloud":
+            stair_photo = cloud_stair_photo
+        elif stair.type == "moving":
+            stair_photo = moving_stair_photo
+        game_display.blit(stair_photo, [stair.x, stair.y])
+
         
     # Current score
     pygame.draw.rect(game_display, Tool.white,[display_width* 0.8, display_height * 0.2, 300, 50]) 
@@ -230,10 +230,20 @@ def GameLoop():
     right_photo = pygame.transform.scale(right_photo, (Person.width, Person.height))
     left_photo = pygame.transform.scale(left_photo, (Person.width, Person.height))
     
+    front_photo_2 = pygame.image.load('小銘正面.png')
+    right_photo_2 = pygame.image.load('小銘側面_右跨步.png')
+    left_photo_2 = pygame.image.load('小銘側面_左跨步.png')
+    front_photo_2 = pygame.transform.scale(front_photo_2, (Person.width, Person.height))
+    right_photo_2 = pygame.transform.scale(right_photo_2, (Person.width, Person.height))
+    left_photo_2 = pygame.transform.scale(left_photo_2, (Person.width, Person.height))
+
     global person_list
     person_list = []
     for i in range(Tool.players):
-        person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
+        if i == 0:
+            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
+        if i == 1:
+            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, front_photo_2, right_photo_2, left_photo_2)
         person_list.append(person)
     
     global score
