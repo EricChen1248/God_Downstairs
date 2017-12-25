@@ -25,6 +25,7 @@ clock = pygame.time.Clock()
 
 person = None
 background_photo = None
+Person.GODMODE = False
 
 def NonMovingBackgroundDisplay():
     """Not-moving objects display"""
@@ -55,20 +56,26 @@ def NonMovingBackgroundDisplay():
     user_image_size = pygame.transform.scale(user_image, (int(display_width * 0.05), int(display_height * 0.1)))
     game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.3])
 
-    game_font = pygame.font.Font('JT1-09U.TTF', 48)
     user_name, user_rect = Tool.TextObjects("小傑", game_font)
     user_rect.center = ((display_width * 0.72), (display_height * 0.35))
     game_display.blit(user_name, user_rect)
 
+    user_image_2 = pygame.image.load('smlu.jpg')
+    user_image_size = pygame.transform.scale(user_image_2, (int(display_width * 0.05), int(display_height * 0.1)))
+    game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.5])
+
+    user_name, user_rect = Tool.TextObjects("小銘", game_font)
+    user_rect.center = ((display_width * 0.72), (display_height * 0.55))
+    game_display.blit(user_name, user_rect)
+
     # Life
     for j in range(Tool.players):
-        game_font = pygame.font.Font('JT1-09U.TTF', 48)
         title_name, title_rect = Tool.TextObjects("命：", game_font)
-        title_rect.center = ((display_width * 0.65), (display_height * 0.45 + 100 * j))
+        title_rect.center = ((display_width * 0.65), (display_height * 0.45 + 120 * j))
         game_display.blit(title_name, title_rect)
 
         for i in range(12):
-            pygame.draw.rect(game_display, Tool.black,[display_width*(0.7+0.0195*i), display_height*0.42 + 100 * j, display_width * 0.02 , display_height*0.06],1) 
+            pygame.draw.rect(game_display, Tool.black,[display_width*(0.7+0.0195*i), display_height*0.42 + 120 * j, display_width * 0.02 , display_height*0.06],1) 
 
 def BackgroundDisplay():
     #截取背景部分圖覆蓋，不用整張背景覆蓋
@@ -137,22 +144,6 @@ def GraphicDisplay():
      
     #stairs
     StairMoving()
-    global general_stair_photo
-    global hurt_stair_photo
-    global cloud_stair_photo
-
-    # person & life
-    global person
-    for j in range(Tool.players):
-        person = person_list[j]
-        game_display.blit(person.photo, [person.x, person.y])
- 
-        life = person.life_count
-        for i in range(life): 
-            pygame.draw.rect(game_display, Tool.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 100 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
-        for i in range(12 - life): 
-            pygame.draw.rect(game_display, Tool.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 100 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
-    
     for i in range(8):
         stair = stair_list[i]
         if stair.type == "general":
@@ -165,13 +156,25 @@ def GraphicDisplay():
             stair_photo = moving_stair_photo
         game_display.blit(stair_photo, [stair.x, stair.y])
 
-        
+    # person & life
+    global person
+    for j in range(Tool.players):
+        person = person_list[j]
+        game_display.blit(person.photo, [person.x, person.y])
+ 
+        life = person.life_count
+        for i in range(life): 
+            pygame.draw.rect(game_display, Tool.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 120 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+        for i in range(12 - life): 
+            pygame.draw.rect(game_display, Tool.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 120 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
+
     # Current score
     pygame.draw.rect(game_display, Tool.white,[display_width* 0.8, display_height * 0.2, 300, 50]) 
     
     game_font = pygame.font.Font('JT1-09U.TTF', 48)
     title_name, title_rect = Tool.TextObjects(str(score.current_score), game_font)
     title_rect.center = ((display_width * 0.84), (display_height * 0.25))
+    title_rect.x = display_width * 0.81
     game_display.blit(title_name, title_rect)
 
     # Pause and Restart(Button)
@@ -223,27 +226,35 @@ def GameLoop():
     stair_list[4].x = 300
     stair_list[4].type = "general"
 
-    front_photo = pygame.image.load('小傑正面.png')
-    right_photo = pygame.image.load('小傑側面_右跨步.png')
-    left_photo = pygame.image.load('小傑側面_左跨步.png')
-    front_photo = pygame.transform.scale(front_photo, (Person.width, Person.height))
-    right_photo = pygame.transform.scale(right_photo, (Person.width, Person.height))
-    left_photo = pygame.transform.scale(left_photo, (Person.width, Person.height))
+    jie_front = pygame.image.load('小傑正面.png')
+    jie_right1 = pygame.image.load('小傑側面_右跨步.png')
+    jie_right2 = pygame.image.load('小傑側面_右收步.png')
+    jie_left1 = pygame.image.load('小傑側面_左跨步.png')
+    jie_left2 = pygame.image.load('小傑側面_左收步.png')
+    jie_front = pygame.transform.scale(jie_front, (Person.width, Person.height))
+    jie_right1 = pygame.transform.scale(jie_right1, (Person.width, Person.height))
+    jie_right2 = pygame.transform.scale(jie_right2, (Person.width, Person.height))
+    jie_left1 = pygame.transform.scale(jie_left1, (Person.width, Person.height))
+    jie_left2 = pygame.transform.scale(jie_left2, (Person.width, Person.height))
     
-    front_photo_2 = pygame.image.load('小銘正面.png')
-    right_photo_2 = pygame.image.load('小銘側面_右跨步.png')
-    left_photo_2 = pygame.image.load('小銘側面_左跨步.png')
-    front_photo_2 = pygame.transform.scale(front_photo_2, (Person.width, Person.height))
-    right_photo_2 = pygame.transform.scale(right_photo_2, (Person.width, Person.height))
-    left_photo_2 = pygame.transform.scale(left_photo_2, (Person.width, Person.height))
+    ming_front = pygame.image.load('小銘正面.png')
+    ming_right1 = pygame.image.load('小銘側面_右跨步.png')
+    ming_right2 = pygame.image.load('小銘側面_右收步.png')
+    ming_left1 = pygame.image.load('小銘側面_左跨步.png')
+    ming_left2 = pygame.image.load('小銘側面_左收步.png')
+    ming_front = pygame.transform.scale(ming_front, (Person.width, Person.height))
+    ming_right1 = pygame.transform.scale(ming_right1, (Person.width, Person.height))
+    ming_right2 = pygame.transform.scale(ming_right2, (Person.width, Person.height))
+    ming_left1 = pygame.transform.scale(ming_left1, (Person.width, Person.height))
+    ming_left2 = pygame.transform.scale(ming_left2, (Person.width, Person.height))
 
     global person_list
     person_list = []
     for i in range(Tool.players):
         if i == 0:
-            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, front_photo, right_photo, left_photo)
+            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, jie_front, jie_right1, jie_right2, jie_left1, jie_left2)
         if i == 1:
-            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, front_photo_2, right_photo_2, left_photo_2)
+            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, ming_front, ming_right1, ming_right2, ming_left1, ming_left2)
         person_list.append(person)
     
     global score

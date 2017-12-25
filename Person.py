@@ -4,20 +4,23 @@ import math
 width = 40
 height = 60
 
+GODMODE = False
 class Person:
-    def __init__(self, x, y, display_width, display_height, front, right, left):
+    def __init__(self, x, y, display_width, display_height, front, right1, right2, left1, left2):
         self.x = x
         self.y = y
-        self.x_change = 0      
         self.life_count = 12
         self.display_width = display_width
         self.display_height = display_height
         self.direction = [0]
-        self.left_photo = left
-        self.right_photo = right
+        self.right_photo_1 = right1
+        self.right_photo_2 = right2
+        self.left_photo_1 = left1
+        self.left_photo_2 = left2
         self.front_photo = front
         self.photo = front  # 預設開始是 正面
         self.alive = True
+        self.animate_count = 0
     '''
     def Photo(self):
         if i = 1:
@@ -31,17 +34,18 @@ class Person:
         # Event Handling
         if self.alive == False:
             return 
+
         for event in events:
             if event.type == pygame.KEYDOWN:            # 若按鍵被按下
                 if who == 1:
                     if event.key == pygame.K_LEFT:          # 按左鍵
                         self.direction.append(-5)
-                    if event.key == pygame. K_RIGHT:        # 按右鍵
+                    if event.key == pygame.K_RIGHT:        # 按右鍵
                         self.direction.append(5)
                 elif who == 2:
                     if event.key == pygame.K_a:          # 按左鍵
                         self.direction.append(-5)
-                    if event.key == pygame. K_d:        # 按右鍵
+                    if event.key == pygame.K_d:        # 按右鍵
                         self.direction.append(5)
             if event.type == pygame.KEYUP:              # 若按鍵放開就不動
                 if who == 1:
@@ -54,13 +58,24 @@ class Person:
                         self.direction.remove(-5)
                     elif event.key == pygame.K_d:
                         self.direction.remove(5)
-                        
+        
+        self.animate_count += 1
         # Handles horizontal movements
         self.x += self.direction[-1]
         if self.direction[-1] == 5:
-            self.photo = self.right_photo
+            if self.animate_count > 10:
+                self.photo = self.right_photo_1
+                if self.animate_count > 20:
+                    self.animate_count = 0
+            else:
+                self.photo = self.right_photo_2
         elif self.direction[-1] == -5:
-            self.photo = self.left_photo
+            if self.animate_count > 10:
+                self.photo = self.left_photo_1
+                if self.animate_count > 20:
+                    self.animate_count = 0
+            else:
+                self.photo = self.left_photo_2
         else:
             self.photo = self.front_photo
 
@@ -82,11 +97,15 @@ class Person:
                 self.Death()
 
     def Death(self):
-        Tool.sounds["Death"].play()
-        self.alive = False
-        self.life_count = 0
-        self.y = 1000
-        Tool.GameEndCount()
+        if GODMODE:
+            self.life_count = 12
+            self.y = 40
+        else:
+            Tool.sounds["Death"].play()
+            self.alive = False
+            self.life_count = 0
+            self.y = 1000
+            Tool.GameEndCount()
 
     def General(self,count, adjust_y):
         ''' 人碰到一般梯子時 '''                                
