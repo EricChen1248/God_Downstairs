@@ -65,7 +65,7 @@ class Stair:
                 person.Hurt(self.count, adjust_y)
             elif self.type == "cloud":
                 self.count += 1
-                person.Cloud(self.count)
+                person.Cloud(self.count, adjust_y + 2)
             elif self.type == "moving":
                 self.count += 1
-                person.Moving(self.count, self.hit_count, adjust_y)
+                person.Moving(self.count, self.hit_count)
