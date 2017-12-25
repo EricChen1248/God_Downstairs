@@ -109,10 +109,13 @@ class Person:
         else:
             self.y += -7
 
-    def Cloud(self, count, adjust_y):
+    def Cloud(self, count, stair_x):
         ''' 人碰到消失梯子 '''
         if count == 1:
-            self.y += 3
+            if self.x <= stair_x + 3:
+                self.y += 5 
+            else:
+                self.y += 3
             if self.life_count < 12:                        # 若沒滿血就加一
                 self.life_count += 1
 
