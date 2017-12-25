@@ -300,8 +300,10 @@ def PlayerCollision():
             # Set players to stand on each other
             if b.y < a.y:
                 b.y = a.y - height
+                b.x += a.direction[-1]
             else:
                 a.y = b.y - height
+                a.x += b.direction[-1]
         # Otherwise players walked into each other
         else:
             # Only need to shift players by the amount of collision

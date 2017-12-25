@@ -44,6 +44,9 @@ class Person:
             if self.cloud_count <= 0:
                 self.fall_through = default_fall_time
 
+    def MovingStair(self, stair):
+        self.x += stair.move_direction
+
     def HitStair(self, stair):
         """ Base hit stair reaction, chains other reactions through """
         # If player is in state of fall through, no interaction with stairs
@@ -69,7 +72,7 @@ class Person:
         # Update Life Drawing    
         Helper.DrawLife()
 
-    def __init__(self, x, y, player_number, front, left1, right1, left2, right2):
+    def __init__(self, x, y, player_number, front, left1, left2, right1, right2):
         self.x = int(x)
         self.y = int(y)
         self.player_number = player_number
@@ -84,7 +87,7 @@ class Person:
         # Used to keep track of cloud standing time
         self.cloud_count = 5
         # Map stair_reaction dictionary
-        self.stair_reaction = {'Normal': Helper.EmptyFunction, 'Spike':self.SpikeStairs, 'Cloud':self.CloudStairs }
+        self.stair_reaction = {'Normal': Helper.EmptyFunction, 'Spike':self.SpikeStairs, 'Cloud':self.CloudStairs, 'Moving':self.MovingStair}
         # Fall through timer count
         self.fall_through = 0
         # Initialize direction with default 0 (Non moving)
