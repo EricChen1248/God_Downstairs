@@ -63,20 +63,13 @@ def PictureButton(where,picture_pre,picture_after,x,y,w,h,action = None):
      mouse = pygame.mouse.get_pos()
      click = pygame.mouse.get_pressed()
      
-     # change color
      if x+w > mouse[0] > x and y+h > mouse[1] > y:
-         #pygame.draw.rect(where, ac,(x,y,w,h))
          where.blit(picture_after, (x, y))
          if click[0] == 1 and action != None:
              action()
      else:
-         #pygame.draw.rect(where, ic,(x,y,w,h))
          where.blit(picture_pre, (x, y))
 
-     #small_font = pygame.font.Font("freesansbold.ttf",32)
-     #text_surf, text_rect = TextObjects(msg, small_font)
-     #text_rect.center = ( (x+(w/2)), (y+(h/2)) )
-     #where.blit(text_surf, text_rect) 
 
 def GameEndCount():
     global death_count
@@ -95,7 +88,7 @@ def GameEnd():
 
     def RestartButton():
         
-        button_width_factor = 0.11
+        button_width_factor = 0.15
         button_height_factor = 0.09
         Button(game_display, "RESTART", display_width / 2 + 180, display_height / 1.15, 
                         display_width * button_width_factor, display_height * button_height_factor, 

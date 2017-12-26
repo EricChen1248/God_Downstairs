@@ -358,36 +358,24 @@ def GameStart():
     def StartButton():
         button_width_factor = 0.18
         button_height_factor = 0.1
-        Tool.Button(game_display, "START", display_width / 2 * 0.8, display_height * 0.7 * (1 - button_height_factor), 
+        Tool.Button(game_display, "START", display_width / 2 * 0.8, display_height * 0.65, 
                         display_width * button_width_factor, display_height * button_height_factor, 
-                        Tool.green, Tool.bright_green, StartGame)
-    """    
-    def PlayerOneButton():
-        one_player_pre = pygame.image.load('小傑正面.png')
-        one_player_pre = pygame.transform.scale(one_player_pre, (Person.width, Person.height))
-        one_player_after = pygame.image.load('小傑正面.png')
-        one_player_after = pygame.transform.scale(one_player_pre, (Person.width, Person.height))
-        
-        Tool.PictureButton(game_display, one_player_pre, one_player_after, display_width / 2 * 0.75, display_height * 0.48, 
-                        display_width * 0.18, display_height * 0.1, TogglePlayer1)      
-
-    def PlayerTwoButton():
-        two_player_pre = pygame.image.load('2P_Pre.png')
-        two_player_pre = pygame.transform.scale(two_player_pre, (Person.width, Person.height))
-        two_player_after = pygame.image.load('2P_Pre.png')
-        two_player_after = pygame.transform.scale(two_player_pre, (Person.width, Person.height))
-    
-
-        Tool.PictureButton(game_display, two_player_pre, two_player_after, display_width / 2 * 1.05, display_height * 0.48, 
-                        display_width * 0.55, display_height * 0.1, TogglePlayer2)
-        """    
+                        Tool.green, Tool.bright_green, StartGame)   
 
     def TogglePlayer2():
         Tool.players = 2
+        P1_text = game_font.render("1P", True, Tool.white)
+        game_display.blit(P1_text, P1_rect)
+        P2_text = game_font.render("2P", True, Tool.red)
+        game_display.blit(P2_text, P2_rect)
         clock.tick(20)
 
     def TogglePlayer1():
         Tool.players = 1
+        P1_text = game_font.render("1P", True, Tool.red)
+        game_display.blit(P1_text, P1_rect)
+        P2_text = game_font.render("2P", True, Tool.white)
+        game_display.blit(P2_text, P2_rect)
         clock.tick(20)
 
 
@@ -397,6 +385,17 @@ def GameStart():
     background_photo = pygame.image.load('BackgroundIntro.png')
     background_photo = pygame.transform.scale(background_photo, (display_width, display_height))
     game_display.blit(background_photo, [0, 0])
+
+    game_font = pygame.font.Font('JT1-09U.TTF', 30)
+    P1_text = game_font.render("1P", True, Tool.white)
+    P1_rect = P1_text.get_rect()
+    P1_rect.center = ((display_width / 2 * 0.78),(display_height * 0.43))
+    game_display.blit(P1_text, P1_rect)
+
+    P2_text = game_font.render("2P", True, Tool.white)
+    P2_rect = P2_text.get_rect()
+    P2_rect.center = ((display_width / 2 * 1.12),(display_height * 0.43))
+    game_display.blit(P2_text, P2_rect)
 
     # Load player mode picture and modify
     one_player_pre = pygame.image.load('小傑正面.png')
@@ -415,9 +414,6 @@ def GameStart():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     StartGame()
-
-        # display background and text
-
         
         ''' pygame.draw.rect(game_display, (100,100,100), (255,255,main_width,main_height))
         pygame.draw.rect(game_display, (125,125,125), (250,250,main_width,main_height)) '''
