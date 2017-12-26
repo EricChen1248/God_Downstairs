@@ -140,6 +140,28 @@ def Restart():
     global game_exit
     game_exit = True
 
+def InitializeStairPhotos():    
+    global general_stair_photo
+    general_stair_photo = pygame.image.load('Generalstairs_2.jpg')
+    general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
+
+    global hurt_stair_photo
+    hurt_stair_photo = pygame.image.load('Stingstairs.png')
+    hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
+
+    global cloud_stair_photo
+    cloud_stair_photo = pygame.image.load('Cloudstairs.png')
+    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 40))
+
+    global moving_stair_photo #放移動樓梯的圖片
+    moving_stair_photo = pygame.image.load('Generalstairs_2.jpg')
+    moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 20))
+    
+    global blackhole_stair_photo #放移動樓梯的圖片
+    blackhole_stair_photo = pygame.image.load('Cloudstairs.png')
+    blackhole_stair_photo = pygame.transform.scale(blackhole_stair_photo, (150, 40))
+
+
 def GraphicDisplay():
     """Moving objects display"""
      
@@ -155,6 +177,8 @@ def GraphicDisplay():
             stair_photo = cloud_stair_photo
         elif stair.type == "moving":
             stair_photo = moving_stair_photo
+        elif stair.type == "blackhole":
+            stair_photo = blackhole_stair_photo
         game_display.blit(stair_photo, [stair.x, stair.y])
 
     # person & life
@@ -202,21 +226,7 @@ def GameLoop():
     Init()
     NonMovingBackgroundDisplay()
 
-    global general_stair_photo
-    general_stair_photo = pygame.image.load('Generalstairs_2.jpg')
-    general_stair_photo = pygame.transform.scale(general_stair_photo, (150, 20))
-    
-    global hurt_stair_photo
-    hurt_stair_photo = pygame.image.load('Stingstairs.png')
-    hurt_stair_photo = pygame.transform.scale(hurt_stair_photo, (150, 20))
-    
-    global cloud_stair_photo
-    cloud_stair_photo = pygame.image.load('Cloudstairs.png')
-    cloud_stair_photo = pygame.transform.scale(cloud_stair_photo, (150, 40))
-
-    global moving_stair_photo #放移動樓梯的圖片
-    moving_stair_photo = pygame.image.load('Generalstairs_2.jpg')
-    moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 20))
+    InitializeStairPhotos()
 
     #initial stair list
     global stair_list
@@ -275,13 +285,20 @@ def GameLoop():
             events = pygame.event.get()
             for i in range(8):
                 stair_list[i].Update(display_width * 0.6)
-                
-            for person in person_list:
-                # 附近的樓梯檢查碰撞就好
-                stair_list[(person.y-33)//75].HitPersonUpdate(person)
-                stair_list[(person.y-33)//75+1].HitPersonUpdate(person)
 
+            # 附近的樓梯檢查碰撞就好  
+            try:
+                for person in person_list:
+                    
+                    stair_list[(person.y-33)//75].HitPersonUpdate(person)
+                    stair_list[(person.y-33)//75+1].HitPersonUpdate(person)                    
+            except IndexError:
+                pass
+
+            # person update
+            for person in person_list:
                 person.Update(events)
+
 
             if Tool.players == 2:
                 Person.PersonInteraction(person_list)
@@ -318,6 +335,7 @@ def GameLoop():
 
         except Exceptions.GameOverError:
             game_exit = True
+
         
 def GameStart():
     """Define Game Intro screen"""

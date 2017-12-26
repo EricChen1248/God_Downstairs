@@ -1,4 +1,5 @@
 import pygame
+import random
 import Tool
 
 width = 40
@@ -137,7 +138,7 @@ class Person:
             self.life_count += -5                           # 命減5
             if self.life_count <= 0:                       # 檢查是否死掉，死了就GameEnd
                 self.Death()
-        else:
+        else: 
             self.y += -7
 
     def Cloud(self, count, stair_x):
@@ -162,6 +163,13 @@ class Person:
                 self.life_count += 1
         else:
             self.y += -7
+    
+    def Blackhole(self, count, adjust_y):
+        ''' 碰到黑洞 '''
+
+        self.x = random.randint(60, display_width * 0.6 - 60)
+        self.y = random.randint(80, display_height * 0.4)
+
                 
 def PersonInteraction(person_list):
     ''' 雙人版互動'''
