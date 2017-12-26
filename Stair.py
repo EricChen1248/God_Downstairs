@@ -57,17 +57,15 @@ class Stair:
             self.MovingStair_x(main_width)               
 
     def HitPersonUpdate(self, person):
-        if self.y + self.height > (person.y + Person.height - 1) > self.y and (self.x + 15) <= (person.x + Person.width) <= (self.x + self.width + Person.width - 15): #小朋友至少要有15像素在樓梯上上         
-            adjust_y = person.y + Person.height - self.y + 3        #小朋友插入梯子的深度，3是調整數
-                       
+        if self.y + self.height > (person.y + Person.height - 1) > self.y and (self.x + 15) <= (person.x + Person.width) <= (self.x + self.width + Person.width - 15): #小朋友至少要有15像素在樓梯上                
             if self.type == "general":
-                person.General(self, adjust_y)
+                person.General(self)
             elif self.type == "hurt":
-                person.Hurt(self, adjust_y)
+                person.Hurt(self)
             elif self.type == "cloud":
                 self.count += 1
                 person.Cloud(self, self.count, self.x)
             elif self.type == "moving":
-                person.Moving(self, self.hit_count, adjust_y)
+                person.Moving(self, self.hit_count)
             elif self.type == "blackhole":
-                person.Blackhole(self, adjust_y)
+                person.Blackhole(self)

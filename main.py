@@ -41,8 +41,8 @@ def NonMovingBackgroundDisplay():
 
     # history highest score
     game_font = pygame.font.Font('JT1-09U.TTF', 36)
-    title_name, title_rect = Tool.TextObjects("歷史高分：", game_font)
-    title_rect.center = ((display_width * 0.68), (display_height * 0.15))
+    title_name, title_rect = Tool.TextObjects("歷史高分： " + str(Tool.highest_score), game_font)
+    title_rect.center = ((display_width * 0.72), (display_height * 0.15))
     game_display.blit(title_name, title_rect)
 
     # Current score
@@ -81,7 +81,7 @@ def NonMovingBackgroundDisplay():
 def BackgroundDisplay():
     #截取背景部分圖覆蓋，不用整張背景覆蓋
     for person in person_list:
-        game_display.blit(background_photo, [person.x, person.y], [person.x, person.y, Person.width, Person.height])
+        game_display.blit(background_photo, [person.x, person.y - 5], [person.x, person.y, Person.width, Person.height])
     for stair in stair_list:
         game_display.blit(background_photo, [stair.x, stair.y], [stair.x, stair.y, 150, 40])
 
@@ -185,7 +185,7 @@ def GraphicDisplay():
     global person
     for j in range(Tool.players):
         person = person_list[j]
-        game_display.blit(person.photo, [person.x, person.y])
+        game_display.blit(person.photo, [person.x, person.y - 5])
  
         life = person.life_count
         for i in range(life): 
@@ -197,7 +197,7 @@ def GraphicDisplay():
     pygame.draw.rect(game_display, Tool.white,[display_width* 0.8, display_height * 0.2, 300, 50]) 
     
     game_font = pygame.font.Font('JT1-09U.TTF', 48)
-    title_name, title_rect = Tool.TextObjects(str(score.current_score), game_font)
+    title_name, title_rect = Tool.TextObjects(str(Score.Instance.current_score), game_font)
     title_rect.center = ((display_width * 0.84), (display_height * 0.25))
     title_rect.x = display_width * 0.81
     game_display.blit(title_name, title_rect)
@@ -269,9 +269,8 @@ def GameLoop():
         elif i == 1:
             person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, ming_front, ming_right1, ming_right2, ming_left1, ming_left2, i + 1)
         person_list.append(person)
-    
-    global score
-    score = Score.Score()
+
+    Score.Instance = Score.Score()
 
     global events
 
@@ -310,7 +309,7 @@ def GameLoop():
             if Tool.players == 2:
                 Person.PersonInteraction(person_list)
 
-            score.Update()
+            Score.Instance.Update()
 
             GraphicDisplay()
 

@@ -22,7 +22,7 @@ class Person:
         self.direction = [0]
         self.alive = True
         self.animate_count = 0
-        self.last_stair = 0
+        self.last_stair = None
 
     def InitializePhotos(self, right1, right2, left1, left2, front):
         self.right_photo_1 = right1
@@ -54,7 +54,7 @@ class Person:
 
         # Handles vertical Movement
         self.y += 5                                    # 自然落下
-        if self.y > display_height:               # 落下超過下邊線就GameEnd
+        if self.y - height > display_height:               # 落下超過下邊線就GameEnd
             self.Death()
         if self.y <= 40:                                 # 若頭刺到上面刺刺
             Tool.sounds["Hurt"].play()
@@ -122,30 +122,29 @@ class Person:
             self.y = 1000
             Tool.GameEndCount()
 
-    def General(self, current_stair, adjust_y):
+    def General(self, current_stair):
         ''' 人碰到一般梯子時 '''                                
+        self.y = current_stair.y - height
         if current_stair != self.last_stair:
-            self.y -= adjust_y
             self.last_stair = current_stair
             if self.life_count < 12:                        # 若沒滿血就加一
-                self.life_count += 1
-        else:
-            self.y += -7                                     # 若梯子是-10往上，要抵銷自然落下就要-20
+                self.life_count += 1                       # 若梯子是-10往上，要抵銷自然落下就要-20
            
-    def Hurt(self, current_stair, adjust_y):
-        ''' 人碰到刺刺梯子時 '''
+    def Hurt(self, current_stair):
+        ''' 人碰到刺刺梯子時 '''                    
+        self.y = current_stair.y - height
         if current_stair != self.last_stair:
-            self.y -= adjust_y
             Tool.sounds["Hurt"].play()
             self.life_count += -5                           # 命減5
             self.last_stair = current_stair
             if self.life_count <= 0:                       # 檢查是否死掉，死了就GameEnd
                 self.Death()
-        else: 
-            self.y += -7
 
     def Cloud(self, current_stair, count, stair_x):
         ''' 人碰到消失梯子 '''
+        if count <= 10:                    
+            self.y = current_stair.y - height
+
         if current_stair != self.last_stair:
             self.last_stair = current_stair 
             if self.x <= stair_x + 3:
@@ -155,21 +154,17 @@ class Person:
             if self.life_count < 12:                        # 若沒滿血就加一
                 self.life_count += 1
 
-        if count <= 10:
-            self.y += -7
 
-    def Moving(self, current_stair, hit_count, adjust_y):
-        ''' 碰到移動樓梯的反應 '''
+    def Moving(self, current_stair, hit_count):
+        ''' 碰到移動樓梯的反應 '''                    
+        self.y = current_stair.y - height
         self.x += 0.8 - hit_count * 1.6                     # hit_count用來決定向左或向右
-        if current_stair != self.last_stair:                                      # 若沒滿血就加一
-            self.y -= adjust_y
+        if current_stair != self.last_stair:   
             self.last_stair = current_stair
             if self.life_count < 12:                        
                 self.life_count += 1
-        else:
-            self.y += -7
     
-    def Blackhole(self, current_stair, adjust_y):
+    def Blackhole(self, current_stair):
         ''' 碰到黑洞 '''
         if current_stair != self.last_stair:
             self.x = random.randint(60, display_width * 0.6 - 60)

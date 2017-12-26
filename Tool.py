@@ -1,5 +1,6 @@
 import pygame
 import Exceptions
+import Score
 
 
 # color set
@@ -18,6 +19,11 @@ clock = None
 death_count = 0
 players = 0
 sounds = {}
+
+# highest score
+score_file = open("HighestScore.txt", "r")
+highest_score = int(score_file.read())
+score_file.close()
 
 
 def Init(display, width, height, clock_):
@@ -92,8 +98,15 @@ def GameEnd():
         button_height_factor = 0.09
         Button(game_display, "RESTART", display_width / 2 + 180, display_height / 1.15, 
                         display_width * button_width_factor, display_height * button_height_factor, 
-                        green, bright_green, GameEndRestart)             
-        
+                        green, bright_green, GameEndRestart) 
+
+    global highest_score
+    if Score.Instance.current_score > highest_score:
+        highest_score = Score.Instance.current_score
+        score_file = open("HighestScore.txt", "w")
+        score_file.write(str(highest_score))
+        score_file.close()
+
     fail = True
 
     while fail:
@@ -116,13 +129,13 @@ def GameEnd():
         game_display.blit(end_text, end_rect)
 
         score_font = pygame.font.Font('JT1-09U.TTF', 100)
-        end_score_text, end_score_rect = TextObjects("得分：", score_font)
-        end_score_rect.center = ((display_width / 2 - 140), (display_height / 2.1))
+        end_score_text, end_score_rect = TextObjects("得分： " + str(Score.Instance.current_score) , score_font)
+        end_score_rect.center = ((display_width / 2 ), (display_height / 2.1))
         game_display.blit(end_score_text, end_score_rect)
 
         highest_font = pygame.font.Font('JT1-09U.TTF', 80)
-        highest_text, highest_rect = TextObjects("歷史高分：", highest_font)
-        highest_rect.center = ((display_width / 2 - 200), (display_height / 1.5))
+        highest_text, highest_rect = TextObjects("歷史高分： " + str(highest_score), highest_font)
+        highest_rect.center = ((display_width / 2 ), (display_height / 1.5))
         game_display.blit(highest_text, highest_rect)
 
         bottomtext_font = pygame.font.Font('JT1-09U.TTF', 50)
@@ -132,8 +145,6 @@ def GameEnd():
 
 
         RestartButton()
-    # if score > highest_score:            # highest score用global，一開始就抓
 
         pygame.display.update()
         clock.tick(15)
-
