@@ -189,7 +189,7 @@ def StairMoving():
         next_stair = Stair.Stair(display_width * 0.6, 8)
         stair_list.append(next_stair)
         gc.collect() # 優化
-#
+
 crashed = False 
 pause = False
 
@@ -250,11 +250,13 @@ def GameLoop():
 
     global person_list
     person_list = []
+    Person.display_width = display_width
+    Person.display_height = display_height
     for i in range(Tool.players):
         if i == 0:
-            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, jie_front, jie_right1, jie_right2, jie_left1, jie_left2)
-        if i == 1:
-            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, display_width, display_height, ming_front, ming_right1, ming_right2, ming_left1, ming_left2)
+            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, jie_front, jie_right1, jie_right2, jie_left1, jie_left2, i + 1)
+        elif i == 1:
+            person = Person.Person(300+75+40-i * 40, stair_list[4].y - 60, ming_front, ming_right1, ming_right2, ming_left1, ming_left2, i + 1)
         person_list.append(person)
     
     global score
@@ -277,7 +279,7 @@ def GameLoop():
 
             for i in range(Tool.players):
                 person = person_list[i]
-                person.Update(i + 1, events)
+                person.Update(events)
             if Tool.players == 2:
                 Person.PersonInteraction(person_list)
 
