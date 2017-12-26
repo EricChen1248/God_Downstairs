@@ -166,9 +166,9 @@ class Person:
     
     def Blackhole(self, count, adjust_y):
         ''' 碰到黑洞 '''
-
-        self.x = random.randint(60, display_width * 0.6 - 60)
-        self.y = random.randint(80, display_height * 0.4)
+        if count == 1:
+            self.x = random.randint(60, display_width * 0.6 - 60)
+            self.y = random.randint(80, display_height * 0.4)
 
                 
 def PersonInteraction(person_list):
