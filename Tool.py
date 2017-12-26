@@ -25,6 +25,9 @@ score_file = open("HighestScore.txt", "r")
 highest_score = int(score_file.read())
 score_file.close()
 
+alt = False
+f4 = False
+
 
 def Init(display, width, height, clock_):
     global game_display
@@ -84,7 +87,26 @@ def GameEndCount():
     if death_count == players:
         GameEnd()
 
+def CheckAltF4(event):
+    global alt
+    global f4
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_LALT or event.key == pygame.K_RALT:
+            alt = True
+        
+        elif event.key == pygame.K_F4:
+            f4 = True 
 
+    if event.type == pygame.KEYUP:
+        if event.key == pygame.K_LALT or event.key == pygame.K_RALT:
+            alt = False
+        
+        elif event.key == pygame.K_F4:
+            f4 = False 
+
+    if alt and f4:
+        pygame.quit()
+        quit()
 
 def GameEnd():
     """Define Game End Screen"""
@@ -113,6 +135,7 @@ def GameEnd():
 
         # Quit
         for event in pygame.event.get():
+            CheckAltF4(event)
             if event.type == pygame.QUIT:
                 pygame.quit()
                 quit()

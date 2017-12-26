@@ -1,6 +1,7 @@
 import pygame
 import random
 import Tool
+import Stair
 
 width = 40
 height = 60
@@ -18,11 +19,13 @@ class Person:
         self.InitializePhotos(right1, right2, left1, left2, front)
 
     def InitializeFixedAttributes(self):
+        self.blackhole_size = 0
         self.life_count = 12
         self.direction = [0]
         self.alive = True
         self.animate_count = 0
         self.last_stair = None
+        self.cloud_count = 0
 
     def InitializePhotos(self, right1, right2, left1, left2, front):
         self.right_photo_1 = right1
@@ -58,7 +61,7 @@ class Person:
             self.Death()
         if self.y <= 40:                                 # 若頭刺到上面刺刺
             Tool.sounds["Hurt"].play()
-            self.y += 25                                # 繼續自然落下(從梯子上面被擠下)
+            Stair.stair_list[0].pass_through = True     # 繼續自然落下(從梯子上面被擠下)
             self.life_count += -5                       # 命減5
             if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
                 self.Death()
@@ -140,14 +143,16 @@ class Person:
             if self.life_count <= 0:                       # 檢查是否死掉，死了就GameEnd
                 self.Death()
 
-    def Cloud(self, current_stair, count, stair_x):
+    def Cloud(self, current_stair):
         ''' 人碰到消失梯子 '''
-        if count <= 10:                    
+        self.cloud_count += 1
+        if self.cloud_count <= 10:                    
             self.y = current_stair.y - height
 
         if current_stair != self.last_stair:
             self.last_stair = current_stair 
-            if self.x <= stair_x + 3:
+            self.cloud_count = 0
+            if self.x <= current_stair.x + 3:
                 self.y += 5
             else:
                 self.y += 3
@@ -155,10 +160,10 @@ class Person:
                 self.life_count += 1
 
 
-    def Moving(self, current_stair, hit_count):
+    def Moving(self, current_stair):
         ''' 碰到移動樓梯的反應 '''                    
         self.y = current_stair.y - height
-        self.x += 0.8 - hit_count * 1.6                     # hit_count用來決定向左或向右
+        self.x += current_stair.stair_speed * current_stair.hit_count
         if current_stair != self.last_stair:   
             self.last_stair = current_stair
             if self.life_count < 12:                        
@@ -166,10 +171,19 @@ class Person:
     
     def Blackhole(self, current_stair):
         ''' 碰到黑洞 '''
-        if current_stair != self.last_stair:
-            self.x = random.randint(60, display_width * 0.6 - 60)
+        self.x -= self.direction[-1]
+        self.blackhole_size += 1
+        target_x = current_stair.x + current_stair.width // 2 - width // 2
+        self.x += (target_x - self.x) / abs(target_x - self.x) * 2
+        self.y = current_stair.y - height
+        if self.blackhole_size == height / 2:
+            self.blackhole_size = 0
             self.y = random.randint(80, display_height * 0.4)
+            self.x = random.randint(60, display_width * 0.6 - 60)
+        
+        if current_stair != self.last_stair:
             self.last_stair = current_stair
+
 
                 
 def PersonInteraction(person_list):
@@ -190,4 +204,4 @@ def PersonInteraction(person_list):
             if person_list[0].y < person_list[1].y:
                 person_list[0].y += delta_y
             else:
-                person_list[1].y += delta_y
+                person_list[1].y += delta_y 

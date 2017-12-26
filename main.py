@@ -19,6 +19,7 @@ pygame.mixer.init()
 pygame.init() 
 display_width = 1200
 display_height = 640
+game_speed = 60
 game_display = pygame.display.set_mode((display_width,display_height))
 pygame.display.set_caption('小傑下樓梯')
 clock = pygame.time.Clock() 
@@ -43,12 +44,13 @@ def NonMovingBackgroundDisplay():
     game_font = pygame.font.Font('JT1-09U.TTF', 36)
     title_name, title_rect = Tool.TextObjects("歷史高分： " + str(Tool.highest_score), game_font)
     title_rect.center = ((display_width * 0.72), (display_height * 0.15))
+    title_rect.x = display_width * 0.62
     game_display.blit(title_name, title_rect)
 
     # Current score
     game_font = pygame.font.Font('JT1-09U.TTF', 48)
     title_name, title_rect = Tool.TextObjects("現在分數：", game_font)
-    title_rect.center = ((display_width * 0.7), (display_height * 0.25))
+    title_rect.center = ((display_width * 0.72), (display_height * 0.25))
     game_display.blit(title_name, title_rect)
 
     # User name and photo
@@ -116,6 +118,7 @@ def Paused():
         Tool.Button(game_display, "Quit",display_width * 0.38,display_height * 0.7,display_width * 0.6 * 0.3 ,display_height * 0.2, Tool.red,Tool.bright_red,QuitGame)
 
         for event in pygame.event.get():
+            Tool.CheckAltF4(event)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     Unpause()
@@ -185,8 +188,11 @@ def GraphicDisplay():
     global person
     for j in range(Tool.players):
         person = person_list[j]
-        game_display.blit(person.photo, [person.x, person.y - 5])
- 
+        if person.blackhole_size != 0:
+            game_display.blit(pygame.transform.scale(person.photo, (Person.width - person.blackhole_size, Person.height - person.blackhole_size * 2)), [person.x + person.blackhole_size // 2, person.y - 5 + person.blackhole_size * 2])
+        else:
+            game_display.blit(person.photo, [person.x, person.y - 5])
+
         life = person.life_count
         for i in range(life): 
             pygame.draw.rect(game_display, Tool.red,[display_width*(0.7+0.0195*i) + 1, display_height*0.42 + 120 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
@@ -194,12 +200,12 @@ def GraphicDisplay():
             pygame.draw.rect(game_display, Tool.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 120 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
 
     # Current score
-    pygame.draw.rect(game_display, Tool.white,[display_width* 0.8, display_height * 0.2, 300, 50]) 
+    pygame.draw.rect(game_display, Tool.white,[display_width* 0.82, display_height * 0.2, 300, 50]) 
     
     game_font = pygame.font.Font('JT1-09U.TTF', 48)
     title_name, title_rect = Tool.TextObjects(str(Score.Instance.current_score), game_font)
-    title_rect.center = ((display_width * 0.84), (display_height * 0.25))
-    title_rect.x = display_width * 0.81
+    title_rect.center = ((display_width * 0.85), (display_height * 0.25))
+    title_rect.x = display_width * 0.82
     game_display.blit(title_name, title_rect)
 
     # Pause and Restart(Button)
@@ -220,6 +226,8 @@ pause = False
 
 #LOOP(Logic of the game)
 def GameLoop():
+    global game_speed
+    game_speed = 60
     global game_exit
     game_exit = False
 
@@ -231,6 +239,7 @@ def GameLoop():
     #initial stair list
     global stair_list
     stair_list = []
+    Stair.stair_list = stair_list
     for i in range(8):
         new_stair = Stair.Stair(display_width * 0.6, i)
         stair_list.append(new_stair)
@@ -295,10 +304,12 @@ def GameLoop():
             for person in person_list:
                 try: 
                     stair_list[(person.y-33)//75].HitPersonUpdate(person)
-                    stair_list[(person.y-33)//75+1].HitPersonUpdate(person)                    
                 except IndexError:
                     pass
-
+                try: 
+                    stair_list[(person.y-33)//75 + 1].HitPersonUpdate(person)
+                except IndexError:
+                    pass
             
 
             # person update
@@ -314,6 +325,7 @@ def GameLoop():
             GraphicDisplay()
 
             for event in events:
+                Tool.CheckAltF4(event)
                 #Quit
                 if event.type == pygame.QUIT:
                     QuitGame()
@@ -337,7 +349,9 @@ def GameLoop():
                         alt = False
 
             pygame.display.update()
-            clock.tick(60)
+            if Score.Instance.current_score % 50 == 0:
+                game_speed += 0.2
+            clock.tick(int(game_speed))
 
         except Exceptions.GameOverError:
             game_exit = True
@@ -384,12 +398,19 @@ def GameStart():
     game_display.blit(intro_background, [0, -30])
     
     game_font = pygame.font.Font('JT1-09U.TTF', 30)
-    P1_text = game_font.render("1P", True, Tool.red)
+    if Tool.players == 1:
+        P1_text = game_font.render("1P", True, Tool.red)
+    else:
+        P1_text = game_font.render("1P", True, Tool.white)
     P1_rect = P1_text.get_rect()
     P1_rect.center = ((display_width / 2 * 0.78),(display_height * 0.43) - 30)
     game_display.blit(P1_text, P1_rect)
 
-    P2_text = game_font.render("2P", True, Tool.white)
+    if Tool.players == 2:
+        P2_text = game_font.render("2P", True, Tool.red)
+    else:
+        P2_text = game_font.render("2P", True, Tool.white)
+        
     P2_rect = P2_text.get_rect()
     P2_rect.center = ((display_width / 2 * 1.12),(display_height * 0.43) - 30)
     game_display.blit(P2_text, P2_rect)
@@ -405,6 +426,7 @@ def GameStart():
 
     while intro:
         for event in pygame.event.get():  
+            Tool.CheckAltF4(event)
             if event.type == pygame.QUIT:
                 QuitGame()
             if event.type == pygame.KEYDOWN:
