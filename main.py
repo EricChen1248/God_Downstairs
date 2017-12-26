@@ -158,7 +158,7 @@ def InitializeStairPhotos():
     moving_stair_photo = pygame.transform.scale(moving_stair_photo, (150, 20))
     
     global blackhole_stair_photo #放移動樓梯的圖片
-    blackhole_stair_photo = pygame.image.load('Cloudstairs.png')
+    blackhole_stair_photo = pygame.image.load('blackhole.png')
     blackhole_stair_photo = pygame.transform.scale(blackhole_stair_photo, (150, 40))
 
 
