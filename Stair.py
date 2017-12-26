@@ -7,15 +7,17 @@ class Stair:
     
     def __init__(self, main_width, count):
         """attributes of stair"""        
-        type_number = random.randint(1, 20)
+        type_number = random.randint(1, 21)
         if 1 <= type_number <= 10:
             self.type = "general"
         elif 11 <= type_number <= 14:
             self.type = "hurt"
         elif 15 <= type_number <= 17:
             self.type = "cloud"
-        else:
+        elif 18 <= type_number <= 20:
             self.type = "moving"
+        else:
+            self.type = "blackhole"
     
         self.width = 150   #假設圖片寬度是150
         self.height = 20  #假設圖片長度是20
@@ -69,3 +71,6 @@ class Stair:
             elif self.type == "moving":
                 self.count += 1
                 person.Moving(self.count, self.hit_count, adjust_y)
+            elif self.type == "blackhole":
+                self.count += 1
+                person.Blackhole(self.count, adjust_y)
