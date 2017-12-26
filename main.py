@@ -351,20 +351,30 @@ def GameStart():
     def StartButton():
         button_width_factor = 0.18
         button_height_factor = 0.1
-        Tool.Button(game_display, "START", display_width / 2 * (1 - button_width_factor), display_height * 0.7 * (1 - button_height_factor), 
+        Tool.Button(game_display, "START", display_width / 2 * 0.8, display_height * 0.7 * (1 - button_height_factor), 
                         display_width * button_width_factor, display_height * button_height_factor, 
                         Tool.green, Tool.bright_green, StartGame)
-        
+    """    
     def PlayerOneButton():
-        Tool.Button(game_display, "1 Player", display_width / 2 * (1 - button_width_factor), display_height * 0.5 * (1 - button_height_factor), 
-                        display_width * button_width_factor, display_height * button_height_factor, 
-                        Tool.red, Tool.bright_red, TogglePlayer2)
+        one_player_pre = pygame.image.load('小傑正面.png')
+        one_player_pre = pygame.transform.scale(one_player_pre, (Person.width, Person.height))
+        one_player_after = pygame.image.load('小傑正面.png')
+        one_player_after = pygame.transform.scale(one_player_pre, (Person.width, Person.height))
+        
+        Tool.PictureButton(game_display, one_player_pre, one_player_after, display_width / 2 * 0.75, display_height * 0.48, 
+                        display_width * 0.18, display_height * 0.1, TogglePlayer1)      
 
     def PlayerTwoButton():
-        Tool.Button(game_display, "2 Player", display_width / 2 * (1 - button_width_factor), display_height * 0.5 * (1 - button_height_factor), 
-                        display_width * button_width_factor, display_height * button_height_factor, 
-                        Tool.red, Tool.bright_red, TogglePlayer1)
+        two_player_pre = pygame.image.load('2P_Pre.png')
+        two_player_pre = pygame.transform.scale(two_player_pre, (Person.width, Person.height))
+        two_player_after = pygame.image.load('2P_Pre.png')
+        two_player_after = pygame.transform.scale(two_player_pre, (Person.width, Person.height))
     
+
+        Tool.PictureButton(game_display, two_player_pre, two_player_after, display_width / 2 * 1.05, display_height * 0.48, 
+                        display_width * 0.55, display_height * 0.1, TogglePlayer2)
+        """    
+
     def TogglePlayer2():
         Tool.players = 2
         clock.tick(20)
@@ -375,6 +385,22 @@ def GameStart():
 
 
     Tool.players = 1
+
+    # Game Intro background display
+    background_photo = pygame.image.load('BackgroundIntro.png')
+    background_photo = pygame.transform.scale(background_photo, (display_width, display_height))
+    game_display.blit(background_photo, [0, 0])
+
+    # Load player mode picture and modify
+    one_player_pre = pygame.image.load('小傑正面.png')
+    one_player_pre = pygame.transform.scale(one_player_pre, (Person.width, Person.height))
+    one_player_after = pygame.image.load('小傑正面.png')
+    one_player_after = pygame.transform.scale(one_player_pre, (Person.width, Person.height))
+    two_player_pre = pygame.image.load('2P_Pre.png')
+    two_player_pre = pygame.transform.scale(two_player_pre, (Person.width * 2 + 5, Person.height))
+    two_player_after = pygame.image.load('2P_Pre.png')
+    two_player_after = pygame.transform.scale(two_player_pre, (Person.width * 2 + 5, Person.height))
+
     while intro:
         for event in pygame.event.get():  
             if event.type == pygame.QUIT:
@@ -385,22 +411,24 @@ def GameStart():
 
         # display background and text
 
-        game_display.fill(Tool.white)
-        game_font = pygame.font.Font('JT1-09U.TTF', 115)
-        start_name, start_rect = Tool.TextObjects("小傑下樓梯~", game_font)
-        start_rect.center = ((display_width / 2), (display_height / 4))
-        game_display.blit(start_name, start_rect)
         
         ''' pygame.draw.rect(game_display, (100,100,100), (255,255,main_width,main_height))
         pygame.draw.rect(game_display, (125,125,125), (250,250,main_width,main_height)) '''
         
         StartButton()    
 
+        # display player mode button
+        Tool.PictureButton(game_display, one_player_pre, one_player_after, display_width / 2 * 0.75,
+                        display_height * 0.48, display_width * 0.18, display_height * 0.1, TogglePlayer1)
+        Tool.PictureButton(game_display, two_player_pre, two_player_after, display_width / 2 * 1.05, 
+                        display_height * 0.48, display_width * 0.85, display_height * 0.1, TogglePlayer2)   
+        """
         if Tool.players == 1:
             PlayerOneButton()
         else:
             PlayerTwoButton()
-
+        """
+        
         pygame.display.update()
         clock.tick(15)
 
