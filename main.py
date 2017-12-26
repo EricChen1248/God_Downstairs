@@ -286,14 +286,21 @@ def GameLoop():
             for i in range(8):
                 stair_list[i].Update(display_width * 0.6)
 
-            # 附近的樓梯檢查碰撞就好  
-            try:
+                """
                 for person in person_list:
-                    
+                    stair_list[i].HitPersonUpdate(person)
+                """
+            
+            # 附近的樓梯檢查碰撞就好  
+            
+            for person in person_list:
+                try: 
                     stair_list[(person.y-33)//75].HitPersonUpdate(person)
                     stair_list[(person.y-33)//75+1].HitPersonUpdate(person)                    
-            except IndexError:
-                pass
+                except IndexError:
+                    pass
+
+            
 
             # person update
             for person in person_list:
