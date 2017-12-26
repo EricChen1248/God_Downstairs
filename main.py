@@ -61,13 +61,18 @@ def Init():
     Helper.stair_photos["Cloud"] = \
         pygame.transform.scale(pygame.image.load('Cloudstairs.png').convert_alpha(), (150, 40))
 
-    
-    front = pygame.transform.scale(pygame.image.load('小傑正面.png'), (Person.width, Person.height)).convert_alpha()
-    right1 = pygame.transform.scale(pygame.image.load('小傑側面_右收步.png'), (Person.width, Person.height)).convert_alpha()
-    right2 = pygame.transform.scale(pygame.image.load('小傑側面_右跨步.png'), (Person.width, Person.height)).convert_alpha()
-    left1 = pygame.transform.scale(pygame.image.load('小傑側面_左收步.png'), (Person.width, Person.height)).convert_alpha()
-    left2 = pygame.transform.scale(pygame.image.load('小傑側面_左跨步.png'), (Person.width, Person.height)).convert_alpha()
-    
+    person_photos = [[],[]]
+    person_photos[0].append(pygame.transform.scale(pygame.image.load('小傑正面.png'), (Person.width, Person.height)).convert_alpha())
+    person_photos[0].append(pygame.transform.scale(pygame.image.load('小傑側面_右跨步.png'), (Person.width, Person.height)).convert_alpha())
+    person_photos[0].append(pygame.transform.scale(pygame.image.load('小傑側面_右收步.png'), (Person.width, Person.height)).convert_alpha())
+    person_photos[0].append(pygame.transform.scale(pygame.image.load('小傑側面_左跨步.png'), (Person.width, Person.height)).convert_alpha())
+    person_photos[0].append(pygame.transform.scale(pygame.image.load('小傑側面_左收步.png'), (Person.width, Person.height)).convert_alpha())
+    person_photos[1].append(pygame.transform.scale(pygame.image.load('小銘正面.png'), (Person.width, Person.height)).convert_alpha())
+    person_photos[1].append(pygame.transform.scale(pygame.image.load('小銘側面_右跨步.png'), (Person.width, Person.height)).convert_alpha())
+    person_photos[1].append(pygame.transform.scale(pygame.image.load('小銘側面_右收步.png'), (Person.width, Person.height)).convert_alpha())
+    person_photos[1].append(pygame.transform.scale(pygame.image.load('小銘側面_左跨步.png'), (Person.width, Person.height)).convert_alpha())
+    person_photos[1].append(pygame.transform.scale(pygame.image.load('小銘側面_左收步.png'), (Person.width, Person.height)).convert_alpha())
+
     global persons
     persons = []
     Person.Init(display_width, display_height, persons)
@@ -75,7 +80,7 @@ def Init():
     Person.display_height = display_height
 
     for i in range(Person.players):
-        persons.append(Person.Person(340 + 75 - 20 + i * 30, stair_list[3].y - Person.height,  i, front, left1, left2, right1, right2))
+        persons.append(Person.Person(340 + 75 - 20 + i * 30, stair_list[3].y - Person.height,  i, person_photos[i][0], person_photos[i][1], person_photos[i][2],person_photos[i][3],person_photos[i][4]))
 
     
     # Draw life graphics

@@ -69,7 +69,7 @@ class Person:
         # Update Life Drawing    
         Helper.DrawLife()
 
-    def __init__(self, x, y, player_number, front, left1, left2, right1, right2):
+    def __init__(self, x, y, player_number, front, left1, right1, left2, right2):
         self.x = int(x)
         self.y = int(y)
         self.player_number = player_number
