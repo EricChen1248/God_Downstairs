@@ -60,13 +60,14 @@ def NonMovingBackgroundDisplay():
     user_rect.center = ((display_width * 0.72), (display_height * 0.35))
     game_display.blit(user_name, user_rect)
 
-    user_image_2 = pygame.image.load('smlu.jpg')
-    user_image_size = pygame.transform.scale(user_image_2, (int(display_width * 0.05), int(display_height * 0.1)))
-    game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.5])
-
-    user_name, user_rect = Tool.TextObjects("小銘", game_font)
-    user_rect.center = ((display_width * 0.72), (display_height * 0.55))
-    game_display.blit(user_name, user_rect)
+    if Tool.players == 2:
+        user_image_2 = pygame.image.load('smlu.jpg')
+        user_image_size = pygame.transform.scale(user_image_2, (int(display_width * 0.05), int(display_height * 0.1)))
+        game_display.blit(user_image_size, [display_width * 0.62, display_height * 0.5])
+        
+        user_name, user_rect = Tool.TextObjects("小銘", game_font)
+        user_rect.center = ((display_width * 0.72), (display_height * 0.55))
+        game_display.blit(user_name, user_rect)
 
     # Life
     for j in range(Tool.players):
@@ -274,12 +275,14 @@ def GameLoop():
             events = pygame.event.get()
             for i in range(8):
                 stair_list[i].Update(display_width * 0.6)
-                for person in person_list:
-                    stair_list[i].HitPersonUpdate(person)
+                
+            for person in person_list:
+                # 附近的樓梯檢查碰撞就好
+                stair_list[(person.y-33)//75].HitPersonUpdate(person)
+                stair_list[(person.y-33)//75+1].HitPersonUpdate(person)
 
-            for i in range(Tool.players):
-                person = person_list[i]
                 person.Update(events)
+
             if Tool.players == 2:
                 Person.PersonInteraction(person_list)
 
