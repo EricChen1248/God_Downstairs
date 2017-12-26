@@ -81,7 +81,7 @@ def NonMovingBackgroundDisplay():
 def BackgroundDisplay():
     #截取背景部分圖覆蓋，不用整張背景覆蓋
     for person in person_list:
-        game_display.blit(background_photo, [person.x, person.y - 5], [person.x, person.y, Person.width, Person.height])
+        game_display.blit(background_photo, [person.x, person.y - 5], [person.x, person.y - 5, Person.width, Person.height + 5])
     for stair in stair_list:
         game_display.blit(background_photo, [stair.x, stair.y], [stair.x, stair.y, 150, 40])
 
@@ -378,15 +378,13 @@ def GameStart():
         clock.tick(20)
 
 
-    Tool.players = 1
-
     # Game Intro background display
     intro_background = pygame.image.load('BackgroundIntro.png')
     intro_background = pygame.transform.scale(intro_background, (display_width, display_height + 30))
     game_display.blit(intro_background, [0, -30])
     
     game_font = pygame.font.Font('JT1-09U.TTF', 30)
-    P1_text = game_font.render("1P", True, Tool.white)
+    P1_text = game_font.render("1P", True, Tool.red)
     P1_rect = P1_text.get_rect()
     P1_rect.center = ((display_width / 2 * 0.78),(display_height * 0.43) - 30)
     game_display.blit(P1_text, P1_rect)

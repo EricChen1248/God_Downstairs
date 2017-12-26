@@ -17,7 +17,7 @@ display_width =  0
 display_height = 0
 clock = None
 death_count = 0
-players = 0
+players = 1
 sounds = {}
 
 # highest score
