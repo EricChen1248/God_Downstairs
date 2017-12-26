@@ -411,6 +411,10 @@ def GameStart():
             if event.type == pygame.QUIT:
                 QuitGame()
             if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    TogglePlayer1()
+                if event.key == pygame.K_RIGHT:
+                    TogglePlayer2()
                 if event.key == pygame.K_SPACE:
                     StartGame()
         
