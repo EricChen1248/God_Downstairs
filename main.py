@@ -101,12 +101,6 @@ def BackgroundDisplay():
 
 def GraphicDisplay():
     """Moving objects display"""
-   
-    # Display person images if alive
-    for person in persons:
-        if person.alive:
-            game_display.blit(person.Photo(), [person.x, person.y])
-
     # Regenerate stairs if top one as reached spikes
     RegenStairs()
     
@@ -114,6 +108,12 @@ def GraphicDisplay():
     for stair in stair_list:
         photo = Helper.stair_photos[stair.type]
         game_display.blit(photo, [stair.x, stair.y - photo.get_height() + 20])
+   
+    # Display person images if alive
+    for person in persons:
+        if person.alive:
+            game_display.blit(person.Photo(), [person.x, person.y])
+
  
     # Pause and Restart(Button)
     Helper.Button("Pause!",display_width * 0.7, display_height * 0.7, display_width * 0.2, display_height * 0.1, Colors.green, Colors.bright_green,action = Helper.Paused)

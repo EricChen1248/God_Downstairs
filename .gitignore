@@ -100,3 +100,11 @@ ENV/
 # mypy
 .mypy_cache/
 .vscode/
+
+\.vs/God_Downstairs/v15/\.suo
+
+\.vs/ProjectSettings\.json
+
+\.vs/slnx\.sqlite
+
+\.vs/VSWorkspaceState\.json
