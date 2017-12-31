@@ -9,6 +9,7 @@ display_width = 0
 display_height = 0
 
 GODMODE = False
+pass_through = False
 class Person:
     def __init__(self, x, y, front, right1, right2, left1, left2, playerID):
         self.x = x
@@ -59,8 +60,12 @@ class Person:
         self.y += 5                                    # 自然落下
         if self.y - height > display_height:               # 落下超過下邊線就GameEnd
             self.Death()
+
+        global pass_through
+        pass_through = False
         if self.y <= 40:                                 # 若頭刺到上面刺刺
             Tool.sounds["Hurt"].play()
+            pass_through = 20
             Stair.stair_list[0].pass_through = True     # 繼續自然落下(從梯子上面被擠下)
             self.life_count += -5                       # 命減5
             if self.life_count <= 0:                    # 檢查是否死掉，死了就GameEnd
@@ -184,10 +189,13 @@ class Person:
         if current_stair != self.last_stair:
             self.last_stair = current_stair
 
-
-                
 def PersonInteraction(person_list):
     ''' 雙人版互動'''
+    global pass_through
+    if pass_through:
+        Stair.stair_list[1].pass_through = True
+        pass_through = False
+        return
     dx = person_list[0].x - person_list[1].x
     dy = person_list[0].y - person_list[1].y
     delta_x = abs(dx) - width
