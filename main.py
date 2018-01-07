@@ -36,19 +36,19 @@ def NonMovingBackgroundDisplay():
 
     # title
     game_font = pygame.font.Font('JT1-09U.TTF', 60)
-    title_name, title_rect = Tool.TextObjects("小傑下樓梯~", game_font)
+    title_name, title_rect = Tool.TextObjects("小傑小銘下樓梯", game_font)
     title_rect.center = ((display_width * 0.8), (display_height * 0.05))
     game_display.blit(title_name, title_rect)
 
     # history highest score
-    game_font = pygame.font.Font('JT1-09U.TTF', 36)
+    game_font = pygame.font.Font('msjhbd.ttc', 36)
     title_name, title_rect = Tool.TextObjects("歷史高分： " + str(Tool.highest_score), game_font)
     title_rect.center = ((display_width * 0.72), (display_height * 0.15))
     title_rect.x = display_width * 0.62
     game_display.blit(title_name, title_rect)
 
     # Current score
-    game_font = pygame.font.Font('JT1-09U.TTF', 48)
+    game_font = pygame.font.Font('msjhbd.ttc', 48)
     title_name, title_rect = Tool.TextObjects("現在分數：", game_font)
     title_rect.center = ((display_width * 0.72), (display_height * 0.25))
     game_display.blit(title_name, title_rect)
@@ -200,9 +200,9 @@ def GraphicDisplay():
             pygame.draw.rect(game_display, Tool.white,[display_width*(0.7+0.0195*(life + i)) + 1, display_height*0.42 + 120 * j + 1, display_width * 0.02 - 2, display_height*0.06 - 2]) 
 
     # Current score
-    pygame.draw.rect(game_display, Tool.white,[display_width* 0.82, display_height * 0.2, 300, 50]) 
+    pygame.draw.rect(game_display, Tool.white,[display_width* 0.82, display_height * 0.2, 300, 60]) 
     
-    game_font = pygame.font.Font('JT1-09U.TTF', 48)
+    game_font = pygame.font.Font('msjhbd.ttc', 48)
     title_name, title_rect = Tool.TextObjects(str(Score.Instance.current_score), game_font)
     title_rect.center = ((display_width * 0.85), (display_height * 0.25))
     title_rect.x = display_width * 0.82
@@ -397,7 +397,7 @@ def GameStart():
     intro_background = pygame.transform.scale(intro_background, (display_width, display_height + 30))
     game_display.blit(intro_background, [0, -30])
     
-    game_font = pygame.font.Font('JT1-09U.TTF', 30)
+    game_font = pygame.font.Font('msjhbd.ttc', 30)
     if Tool.players == 1:
         P1_text = game_font.render("1P", True, Tool.red)
     else:
