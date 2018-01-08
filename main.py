@@ -95,6 +95,7 @@ def Init():
     Tool.Init(game_display, display_width, display_height, clock)
     Tool.AddSound("Hurt", pygame.mixer.Sound('短慘叫.wav'))
     Tool.AddSound("Death", pygame.mixer.Sound('長慘叫.wav'))
+    Tool.AddSound("Yay", pygame.mixer.Sound('耶.wav'))
     
 """ Button Motion """ 
 

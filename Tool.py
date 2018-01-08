@@ -112,7 +112,8 @@ def GameEnd():
     """Define Game End Screen"""
 
     def GameEndRestart():
-            raise Exceptions.GameOverError
+        sounds["Yay"].play()
+        raise Exceptions.GameOverError
 
     def RestartButton():
         
