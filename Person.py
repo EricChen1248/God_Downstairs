@@ -134,6 +134,7 @@ class Person:
         ''' 人碰到一般梯子時 '''                                
         self.y = current_stair.y - height
         if current_stair != self.last_stair:
+            self.blackhole_size = 0
             self.last_stair = current_stair
             if self.life_count < 12:                        # 若沒滿血就加一
                 self.life_count += 1                       # 若梯子是-10往上，要抵銷自然落下就要-20
