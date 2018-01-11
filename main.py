@@ -21,7 +21,7 @@ display_width = 1200
 display_height = 640
 game_speed = 60
 game_display = pygame.display.set_mode((display_width,display_height))
-pygame.display.set_caption('小傑下樓梯')
+pygame.display.set_caption('小傑小銘下樓梯')
 clock = pygame.time.Clock() 
 
 person = None
