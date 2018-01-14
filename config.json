@@ -1,0 +1,15 @@
+{
+    "default_player_count": 1,
+    "godmode": false,
+    "hiscore": 0,
+    "keys": [
+        [
+            "Left",
+            "Right"
+        ],
+        [
+            "A",
+            "D"
+        ]
+    ]
+}
